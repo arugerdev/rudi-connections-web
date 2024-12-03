@@ -33,9 +33,9 @@ export const AuthLayoutWrapper = ({ children }: Props) => {
         </div>
 
         <div className='z-10'>
-          <h1 className='font-bold text-[45px]'>Rudi Connections - Panel de administración</h1>
+          <h1 className='font-bold text-[45px]'>Rud1 Connections - Panel de administración</h1>
           <div className='font-light text-slate-400 mt-4'>
-            Panel de administración para tus dispostivos Rudi, puedes añadir, configurar, enceder, apagar, probar o conectarte a tus dispostivos desde aquí. Inicia sesión o crea una cuenta para empezar.
+            Panel de administración para tus dispostivos Rud1, puedes añadir, configurar, enceder, apagar, probar o conectarte a tus dispostivos desde aquí. Inicia sesión o crea una cuenta para empezar.
           </div>
         </div>
       </div>
