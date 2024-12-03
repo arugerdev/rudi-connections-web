@@ -33,12 +33,9 @@ export const AuthLayoutWrapper = ({ children }: Props) => {
         </div>
 
         <div className='z-10'>
-          <h1 className='font-bold text-[45px]'>NextUI Dashboard Template</h1>
+          <h1 className='font-bold text-[45px]'>Rudi Connections - Panel de administración</h1>
           <div className='font-light text-slate-400 mt-4'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi
-            possimus voluptate, sapiente assumenda deserunt repellendus,
-            perferendis odit voluptas hic dolores laborum fugit ut? Architecto
-            quo ex quidem vitae quae rem.
+            Panel de administración para tus dispostivos Rudi, puedes añadir, configurar, enceder, apagar, probar o conectarte a tus dispostivos desde aquí. Inicia sesión o crea una cuenta para empezar.
           </div>
         </div>
       </div>
