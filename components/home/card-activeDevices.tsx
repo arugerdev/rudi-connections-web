@@ -16,7 +16,7 @@ export const CardActivesDevices = () => {
           <span className="text-white text-xl">Dispositivos activos</span>
         </div>
         <div className="flex items-end justify-end h-full">
-          <span className="text-white text-4xl font-semibold">{(devices ? devices?.filter((d) => d.status === 'active' || d.status === 'running').length : 0)}</span>
+          <span className="text-white text-4xl font-semibold">{(devices ? devices?.filter((d: any) => d.status === 'active' || d.status === 'running').length : 0)}</span>
         </div>
       </CardBody>
     </Card>
