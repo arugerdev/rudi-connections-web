@@ -64,11 +64,11 @@ export const AddDevice = () => {
                   {({ values, errors, touched, handleChange, handleSubmit }) => (
                     <form action="javascript:void(0)" className="w-full flex items-center justify-center flex-col" onSubmit={() => handleSubmit}>
                       <ModalBody>
-                        <ReactInputMask mask='****-****-****-****' isInvalid={!!errors.id && !!touched.id}
-                          errorMessage={errors.id} type="text" onChange={handleChange("id")} maskChar={''} value={values.id.toUpperCase().replaceAll('-', '')}>
+                        <ReactInputMask mask='****-****-****-****'
+                          type="text" onChange={handleChange("id")} maskChar={''} value={values.id.toUpperCase().replaceAll('-', '')}>
                           {(inputProps: InputProps) => (
 
-                            <Input {...inputProps} label="Id dispositivo" variant="bordered" placeholder="XXXX-XXXX-XXXX-XXXX" />
+                            <Input {...inputProps} isInvalid={!!errors.id && !!touched.id} errorMessage={errors.id} label="Id dispositivo" variant="bordered" placeholder="XXXX-XXXX-XXXX-XXXX" />
                           )}
                         </ReactInputMask>
 
