@@ -24,7 +24,7 @@ export const TableWrapper = ({ filter = '' }) => {
     if (!filter || filter === '') return devices
     let filteredDevices: Array<any> = []
 
-    filteredDevices = devices.filter((device: object) =>
+    filteredDevices = devices.filter((device: any) =>
       device?.name?.toLowerCase().includes(filter.toLowerCase())
       ||
       device?.public_ip?.includes(filter)
