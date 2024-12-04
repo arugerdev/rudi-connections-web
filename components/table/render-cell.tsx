@@ -54,7 +54,7 @@ export const RenderCell = ({ device, columnKey }: Props) => {
           color={
             cellValue === "active" || cellValue === 'running'
               ? "success"
-              : cellValue === "stoped"
+              : cellValue === "stopped"
                 ? "danger"
                 : "warning"
           }
