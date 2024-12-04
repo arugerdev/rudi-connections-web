@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/client";
 
 export const columns = [
    { name: 'Nombre', uid: 'name' },
-   { name: 'IP Pública', uid: 'ip' },
+   { name: 'IP Pública', uid: 'public_ip' },
    { name: 'Estado', uid: 'status' },
    { name: 'Acciones', uid: 'actions' },
 ];

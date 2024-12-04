@@ -35,7 +35,7 @@ export const Content = () => (
           Ver todos
         </Link>
       </div>
-      <TableWrapper />
+      <TableWrapper select={false} />
     </div>
   </div>
 );

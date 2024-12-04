@@ -7,12 +7,13 @@ import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { signInWithEmail } from "./supabase-auth";
 import { createClient } from "@supabase/supabase-js";
 
 export const Login = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false)
 
   const initialValues: LoginFormType = {
     email: "",
@@ -21,11 +22,14 @@ export const Login = () => {
 
   const handleLogin = useCallback(
     async (values: LoginFormType) => {
+      setLoading(true)
       // `values` contains email & password. You can use provider to connect user
       signInWithEmail(values.email, values.password).then((data) => {
 
+        setLoading(false)
         router.push('/')
       }).catch((err) => {
+        setLoading(false)
         console.log(err)
 
         alert(err)
@@ -68,6 +72,7 @@ export const Login = () => {
             </div>
 
             <Button
+              isLoading={loading}
               onPress={() => handleSubmit()}
               variant='flat'
               type="submit"

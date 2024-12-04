@@ -1,4 +1,4 @@
-import { User, Tooltip, Chip, Button } from "@nextui-org/react";
+import { User, Tooltip, Chip, Button, useDisclosure } from "@nextui-org/react";
 import React, { useState } from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
@@ -6,6 +6,7 @@ import { EyeIcon } from "../icons/table/eye-icon";
 import { CopyIcon } from "../icons/table/copy-icon";
 import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
+import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
 
 interface Props {
   device: any;
@@ -30,16 +31,16 @@ export const RenderCell = ({ device, columnKey }: Props) => {
   switch (columnKey) {
     case "name":
       return (
-        <strong>{device?.name}</strong>
+        <strong>{device?.config.deviceName}</strong>
       );
-    case "ip":
+    case "public_ip":
       return (
         <div className="flex flex-row gap-2 items-center">
           <p className={(device?.public_ip != '' ? 'font-base text-foreground' : 'font-bold text-slate-500')}>{(device?.public_ip != '' ? device.public_ip : 'No tiene ip publica actualmente')}{' '}</p>
           {device.public_ip &&
 
             <Tooltip content="Copiar IP Pública">
-              <button onClick={() => { navigator.clipboard.writeText(device.public_ip); toast.success(`IP Pública copiada correctamente \n ${device.name}: ${device.public_ip}`) }}>
+              <button onClick={() => { navigator.clipboard.writeText(device.public_ip); toast.success(`IP Pública copiada correctamente \n ${device?.config?.config?.deviceName}: ${device.public_ip}`) }}>
                 <CopyIcon size={24} fill="#979797" />
               </button>
             </Tooltip>
@@ -75,7 +76,7 @@ export const RenderCell = ({ device, columnKey }: Props) => {
           });;
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
-          link.download = `${device?.name}.conf`; // Nombre del archivo de WireGuard
+          link.download = `${device?.config.deviceName}.conf`; // Nombre del archivo de WireGuard
           link.click();
         } catch (error) {
           alert(error);
@@ -93,13 +94,13 @@ export const RenderCell = ({ device, columnKey }: Props) => {
                 </Button>
               </Tooltip>
             </div>
-            <div>
+            {/* <div>
               <Tooltip content="Editar Dispositivo">
                 <Button isDisabled isIconOnly variant='light' onClick={() => console.log("Editar", device?.id)}>
                   <EditIcon size={20} fill="#979797" />
                 </Button>
               </Tooltip>
-            </div>
+            </div> */}
             <div>
               <Tooltip
                 content="Borrar dispositivo"
@@ -111,7 +112,10 @@ export const RenderCell = ({ device, columnKey }: Props) => {
               </Tooltip>
             </div>
           </section>
-          <section>
+          <section className="flex flex-row gap-4">
+            <div>
+              <ConfigureDeviceButtonModal device={device} />
+            </div>
             <div>
               <Tooltip
                 content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
