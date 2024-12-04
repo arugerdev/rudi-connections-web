@@ -1,13 +1,29 @@
 import { Card, CardBody } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { getDevices } from "../table/data";
+import { createClient } from "@/utils/supabase/client";
 
 export const CardAllDevices = () => {
   const [devices, setDevices] = useState<any | null>()
 
   useEffect(() => {
     getDevices().then((data) => setDevices(data.data))
+
+    const supabase = createClient()
+
+    supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'devices' },
+        () => {
+          getDevices().then((data) => setDevices(data.data))
+
+        }
+      )
+      .subscribe()
   }, [])
+
   return (
     <Card className="xl:max-w-sm bg-[#eee] rounded-xl shadow-md  w-full ">
       <CardBody className="overflow-hidden">

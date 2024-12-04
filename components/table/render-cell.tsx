@@ -1,5 +1,5 @@
 import { User, Tooltip, Chip, Button } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
@@ -64,22 +64,40 @@ export const RenderCell = ({ device, columnKey }: Props) => {
       );
 
     case "actions":
+      const handleDownload = async () => {
+        try {
+          const response = await (await fetch(`/api/get-wireguard?deviceKey=${device?.key}`)).json();
+          if (response.message !== 'OK') {
+            throw new Error('Error al generar el archivo');
+          }
+          const blob = new Blob([response.result], {
+            type: 'text/plain'
+          });;
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `${device?.name}.conf`; // Nombre del archivo de WireGuard
+          link.click();
+        } catch (error) {
+          alert(error);
+        }
+      };
+
       return (
         <div className="flex items-center flex-row justify-end gap-8">
-          <section className="flex items-center justify-center flex-row gap-4">
+          <section className="flex items-center justify-center flex-row gap-2">
 
             <div>
               <Tooltip content="Ver detalles">
-                <button onClick={() => console.log("Ver detalles", device?.id)}>
+                <Button isDisabled isIconOnly variant='light' onClick={() => console.log("Ver detalles", device?.id)}>
                   <EyeIcon size={20} fill="#979797" />
-                </button>
+                </Button>
               </Tooltip>
             </div>
             <div>
               <Tooltip content="Editar Dispositivo">
-                <button onClick={() => console.log("Editar", device?.id)}>
+                <Button isDisabled isIconOnly variant='light' onClick={() => console.log("Editar", device?.id)}>
                   <EditIcon size={20} fill="#979797" />
-                </button>
+                </Button>
               </Tooltip>
             </div>
             <div>
@@ -87,19 +105,20 @@ export const RenderCell = ({ device, columnKey }: Props) => {
                 content="Borrar dispositivo"
                 color="danger"
               >
-                <button onClick={() => handleRemoveDevice()}>
+                <Button isIconOnly variant='light' onClick={() => handleRemoveDevice()}>
                   <DeleteIcon size={20} fill="#FF0080" />
-                </button>
+                </Button>
               </Tooltip>
             </div>
           </section>
           <section>
             <div>
               <Tooltip
-                content="Conectar al dispositivo a traves de la VPN"
+                content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                 color="primary"
               >
-                <Button color="primary" variant="ghost" onClick={() => console.log("Conectar", device?.id)}>Conectar
+                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === ''} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
+                  Conectar
                 </Button >
               </Tooltip>
             </div>
