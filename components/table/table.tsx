@@ -11,13 +11,25 @@ import {
 import React, { useEffect, useState } from "react";
 import { columns, getDevices } from "./data";
 import { RenderCell } from "./render-cell";
+import { createClient } from "@/utils/supabase/client";
 
 export const TableWrapper = ({ filter = '' }) => {
   const [devices, setDevices] = useState<any | null>()
   const [loading, setLoading] = useState<boolean>(true)
-
   useEffect(() => {
+    const supabase = createClient()
     getDevices().then((data) => setDevices(data.data)).finally(() => setLoading(false))
+
+    supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'devices' },
+        () => {
+          getDevices().then((data) => setDevices(data.data)).finally(() => setLoading(false))
+        }
+      )
+      .subscribe()
   }, [])
 
   const filterDevices = (devices: Array<any>) => {
