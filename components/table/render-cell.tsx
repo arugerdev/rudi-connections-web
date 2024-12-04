@@ -22,7 +22,7 @@ export const RenderCell = ({ device, columnKey }: Props) => {
     if (data.error) {
       throw data.error
     }
-    window.location.reload()
+    // window.location.reload()
   }
 
   // @ts-ignore
