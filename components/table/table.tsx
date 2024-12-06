@@ -19,6 +19,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useAsyncList } from "@react-stately/data";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { Selection } from '@nextui-org/react';
+import { ConfigFormType, DeviceIdFormType } from "@/helpers/types";
 
 export const TableWrapper = ({ filter = '', select = true }) => {
   const [loading, setLoading] = useState<boolean>(true)
@@ -41,7 +42,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
     return filteredDevices
   }
 
-  let list = useAsyncList({
+  let list = useAsyncList<DeviceIdFormType>({
     async load() {
       let dataDevices: any = []
       await getDevices().then((data) => {
