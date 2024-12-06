@@ -49,6 +49,7 @@ export const InputsArray = ({ className, initialValuesAsPlaceholder = false, ini
                 if (masked) {
                     return (
                         <ReactInputMask
+                            key={item + key}
                             mask={mask}
                             type="text"
                             onChange={(e) => handleChange(e.target.value, key)}
@@ -63,11 +64,21 @@ export const InputsArray = ({ className, initialValuesAsPlaceholder = false, ini
                     )
                 }
                 return (
-                    <Input variant="bordered" placeholder={(initialValuesAsPlaceholder ? initialValues[key] : placeholders)} color={color} value={item} key={key} onChange={(e) => handleChange(e.target.value, key)} endContent={<Button isIconOnly variant='light' onClick={() => handleRemove(key)}>
-                        <DeleteIcon size={20} fill="#FF0080" />
-                    </Button>} />)
-
-
+                    <Input
+                        key={item + key}
+                        variant="bordered"
+                        placeholder={(initialValuesAsPlaceholder ? initialValues[key] : placeholders)}
+                        color={color}
+                        value={item}
+                        onChange={(e) => handleChange(e.target.value, key)}
+                        endContent={
+                            <Button isIconOnly
+                                variant='light'
+                                onClick={() => handleRemove(key)}>
+                                <DeleteIcon size={20} fill="#FF0080" />
+                            </Button>
+                        }
+                    />)
             })
             }
             <Button onPress={handleAdd} className="font-bold" variant="light" color='success'>+</Button>

@@ -2,6 +2,7 @@ import {
   Button,
   CircularProgress,
   Link,
+  Pagination,
   Spinner,
   Table,
   TableBody,
@@ -17,12 +18,14 @@ import { RenderCell } from "./render-cell";
 import { createClient } from "@/utils/supabase/client";
 import { useAsyncList } from "@react-stately/data";
 import { DeleteIcon } from "../icons/table/delete-icon";
+import { Selection } from '@nextui-org/react';
 
 export const TableWrapper = ({ filter = '', select = true }) => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const supabase = createClient()
+  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set());
+  const [page, setPage] = useState(1);
 
+  const supabase = createClient()
   const filterDevices = (devices: Array<any>) => {
     if (!filter || filter === '') return devices
     let filteredDevices: Array<any> = []
@@ -112,7 +115,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
           if (hasChanges) {
             console.log('Detected relevant changes: ', relevantNewData);
             // Aquí puedes realizar la acción que necesites, como recargar los datos
-            // list.reload(); // Lógica para recargar los datos si es necesario
+            list.reload(); // Lógica para recargar los datos si es necesario
           } else {
             console.log('Change in last_update or status, ignoring...');
           }
@@ -129,7 +132,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
 
   function handleRemoveMultipleDevices(): void {
     const supabase = createClient()
-    if (selectedKeys === 'all') {
+    if (selectedKeys == 'all') {
       list.items.forEach(async (item) => {
         const data = await supabase.from('devices').update({ owned_by: null }).eq('id', item?.id);
         if (data.error) {
@@ -153,12 +156,12 @@ export const TableWrapper = ({ filter = '', select = true }) => {
     <div className=" w-full flex flex-col gap-2">
       {select &&
         <section className="flex flex-row gap-2 items-center justify-between text-foreground-400 font-semibold text-sm">
-          <p>Dispositivos seleccionados: {(selectedKeys === 'all' ? list.items.length : selectedKeys.size)}</p>
+          <p>Dispositivos seleccionados: {(selectedKeys == 'all' ? list.items.length : selectedKeys.size)}</p>
           <Tooltip
             content="Borrar dispositivo"
             color="danger"
           >
-            <Button isDisabled={selectedKeys.size <= 0} isIconOnly variant='light' onClick={() => handleRemoveMultipleDevices()}>
+            <Button isDisabled={(selectedKeys == 'all' ? false : selectedKeys.size <= 0)} isIconOnly variant='light' onClick={() => handleRemoveMultipleDevices()}>
               <DeleteIcon size={20} fill="#FF0080" />
             </Button>
           </Tooltip>
@@ -169,7 +172,11 @@ export const TableWrapper = ({ filter = '', select = true }) => {
         onSortChange={list.sort}
         selectionMode={select ? "multiple" : 'none'}
         selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
+        onSelectionChange={(keys: Selection) => {
+          setSelectedKeys(keys)
+          console.log(keys)
+          console.log(selectedKeys)
+        }}
         color={'primary'}
 
       >

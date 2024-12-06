@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import { signInWithEmail } from "../auth/supabase-auth";
 import { InputsArray } from "../inputs/InputsArray";
 
-export const ConfigureDeviceButtonModal = ({ device = null, resetList = () => { } }) => {
+export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { device: { id: number, config: ConfigFormType }, resetList: CallableFunction }) => {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const supabase = createClient()
     const [config, setConfig] = useState<ConfigFormType>(device?.config)
