@@ -23,6 +23,7 @@ export const NavbarWrapper = ({ children }: Props) => {
         </NavbarContent>
         <NavbarContent className="w-full max-md:hidden">
           <Input
+            isDisabled
             startContent={<SearchIcon />}
             isClearable
             className="w-full"
@@ -30,7 +31,7 @@ export const NavbarWrapper = ({ children }: Props) => {
               input: "w-full",
               mainWrapper: "w-full",
             }}
-            placeholder="Buscar..."
+            placeholder="Buscar...  - EN DESARROLLO 🚧"
           />
         </NavbarContent>
         <NavbarContent

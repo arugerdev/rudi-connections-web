@@ -32,7 +32,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
     let filteredDevices: Array<any> = []
 
     filteredDevices = devices.filter((device: any) =>
-      device?.name?.toLowerCase().includes(filter.toLowerCase())
+      device?.config?.deviceName?.toLowerCase().includes(filter.toLowerCase())
       ||
       device?.public_ip?.includes(filter)
       ||
