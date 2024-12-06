@@ -67,17 +67,65 @@ export const TableWrapper = ({ filter = '', select = true }) => {
   });
 
   useEffect(() => {
-    supabase
+    // Función para obtener los datos más recientes desde la base de datos
+    const fetchCurrentData = async (id: any) => {
+      const { data, error } = await supabase
+        .from('devices')
+        .select('*')
+        .eq('id', id) // Asegúrate de poner la id adecuada
+        .single();
+
+      if (error) {
+        console.error('Error fetching current data:', error);
+        return null;
+      }
+      return data;
+    };
+
+    // Suscribirse a los cambios
+    const subscription = supabase
       .channel('schema-db-changes')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'devices' },
-        () => {
-          list.reload()
+        async (value) => {
+          // Verificar que sea un cambio en la tabla devices
+          const newData = value.new;
+
+          // Excluir 'last_update' y 'status' de la comparación
+          const { last_update, status, public_ip, ...relevantNewData } = newData;
+
+          // Consultar la base de datos para obtener el estado actual
+          const currentData = await fetchCurrentData(newData?.id);
+
+          // Si no pudimos obtener los datos actuales, no hacemos nada
+          if (!currentData) return;
+
+          // Excluir también last_update y status del objeto de datos actual
+          const { last_update: currentLastUpdate, status: currentStatusm, public_ip: currePublicIp, ...relevantCurrentData } = currentData;
+
+          // Comparar los datos relevantes (sin last_update ni status)
+          const hasChanges = Object.keys(relevantNewData).some(
+            (key) => relevantNewData[key] !== relevantCurrentData[key]
+          );
+
+          if (hasChanges) {
+            console.log('Detected relevant changes: ', relevantNewData);
+            // Aquí puedes realizar la acción que necesites, como recargar los datos
+            // list.reload(); // Lógica para recargar los datos si es necesario
+          } else {
+            console.log('Change in last_update or status, ignoring...');
+          }
         }
       )
-      .subscribe()
-  }, [])
+      .subscribe();
+
+    // Cleanup del efecto (desuscripción cuando el componente se desmonta)
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
 
   function handleRemoveMultipleDevices(): void {
     const supabase = createClient()
@@ -146,7 +194,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>
-                  {RenderCell({ device: item, columnKey: columnKey })}
+                  {RenderCell({ device: item, columnKey: columnKey, resetList: list.reload })}
                 </TableCell>
               )}
             </TableRow>

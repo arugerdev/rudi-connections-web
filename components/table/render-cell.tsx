@@ -11,9 +11,10 @@ import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModa
 interface Props {
   device: any;
   columnKey: string | React.Key;
+  resetList: CallableFunction;
 }
 
-export const RenderCell = ({ device, columnKey }: Props) => {
+export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) => {
 
   const handleRemoveDevice = async () => {
     console.log('Delete device')
@@ -114,7 +115,7 @@ export const RenderCell = ({ device, columnKey }: Props) => {
           </section>
           <section className="flex flex-row gap-4">
             <div>
-              <ConfigureDeviceButtonModal device={device} />
+              <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
             <div>
               <Tooltip

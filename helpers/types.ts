@@ -14,3 +14,38 @@ export type RegisterFormType = {
 export type DeviceIdFormType = {
   id: string;
 };
+
+
+export type ConfigFormType = {
+  deviceName: string;
+  vpnConfig: {
+    privateKey: string;
+    publicKey: string;
+    presharedKey: string;
+    endpoint: string;
+    allowedIPs: string;
+    dns: string;
+    persistentKeepalive: number;
+  },
+  systemConfig: {
+    firstRun: boolean,
+    passwordHash: string,
+    wireGuardConfigPath: string
+  },
+  networkConfig: {
+    ipAddress: string,
+    gateway: string,
+    dns: [string],
+    interfaces: [{
+      name: string,
+      type: string,
+      method: string,
+      ssid?: string
+      password?: string
+      provider?: string
+    }]
+  },
+  simConfig: {
+    pin: string
+  }
+};
