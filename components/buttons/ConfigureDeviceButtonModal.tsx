@@ -117,7 +117,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                     color="default"
                                                     onValueChange={(value: any) => setFieldValue('networkConfig.dns', value)}
                                                 />
-                                                <section className="flex flex-row justify-center items-start gap-16">
+                                                <section className="flex flex-col md:flex-row justify-center items-start gap-16">
                                                     {config.networkConfig.interfaces.map((inter, key) => {
                                                         return (
                                                             <section key={inter.name + '_' + inter.type + '_' + key} className="flex flex-col w-full">
