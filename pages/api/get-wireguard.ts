@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest,
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
     const { data, error } = await supabase
         .from('devices')
-        .select('public_ip, private_key, public_key, preshared_key, dns, config')
+        .select('public_ip, dns, config')
         .eq('key', deviceKey)
         .single();
 
@@ -37,18 +37,18 @@ export default async function handler(req: NextApiRequest,
     }
 
     // Datos del dispositivo desde Supabase
-    const { public_ip, private_key, public_key, preshared_key, dns, config } = data;
+    const { public_ip, dns, config } = data;
 
     // Generación del archivo de configuración de WireGuard
     const wireguardConfig = `
 [Interface]
 Address = 10.7.0.2/24
 DNS = ${dns}
-PrivateKey = ${private_key}
+PrivateKey = ${config.vpnConfig.privateKey}
 
 [Peer]
-PublicKey = ${public_key}
-PresharedKey = ${preshared_key}
+PublicKey = ${config.vpnConfig.publicKey}
+PresharedKey = ${config.vpnConfig.presharedKey}
 AllowedIPs = 0.0.0.0/0, ::/0
 Endpoint = ${public_ip}:51820
 PersistentKeepalive = 25
