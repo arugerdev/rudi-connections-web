@@ -120,7 +120,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                 <section className="flex flex-row justify-center items-start gap-16">
                                                     {config.networkConfig.interfaces.map((inter, key) => {
                                                         return (
-                                                            <section className="flex flex-col w-full">
+                                                            <section key={inter.name + '_' + inter.type + '_' + key} className="flex flex-col w-full">
                                                                 <h1 className="font-bold text-xl p-0">{inter.name}{<span className="text-danger select-none	"></span>
                                                                 }</h1>
                                                                 <h2 className="font-bold text-sm pb-4 p-0">{inter.type}</h2>

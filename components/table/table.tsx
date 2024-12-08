@@ -109,11 +109,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
         onSortChange={list.sort}
         selectionMode={select ? "multiple" : 'none'}
         selectedKeys={selectedKeys}
-        onSelectionChange={(keys: Selection) => {
-          setSelectedKeys(keys)
-          console.log(keys)
-          console.log(selectedKeys)
-        }}
+        onSelectionChange={setSelectedKeys}
         color={'primary'}
 
       >
