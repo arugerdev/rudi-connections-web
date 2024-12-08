@@ -1,8 +1,5 @@
 import {
   Button,
-  CircularProgress,
-  Link,
-  Pagination,
   Spinner,
   Table,
   TableBody,
@@ -19,11 +16,10 @@ import { createClient } from "@/utils/supabase/client";
 import { useAsyncList } from "@react-stately/data";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { Selection } from '@nextui-org/react';
-import { ConfigFormType, DeviceIdFormType } from "@/helpers/types";
+import { Database } from "@/helpers/database.types";
 
 export const TableWrapper = ({ filter = '', select = true }) => {
-  const [loading, setLoading] = useState<boolean>(true)
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set());
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
   const [page, setPage] = useState(1);
 
   const supabase = createClient()
@@ -42,12 +38,12 @@ export const TableWrapper = ({ filter = '', select = true }) => {
     return filteredDevices
   }
 
-  let list = useAsyncList<DeviceIdFormType>({
+  let list = useAsyncList<Database["public"]["Tables"]["devices"]["Row"]>({
     async load() {
       let dataDevices: any = []
       await getDevices().then((data) => {
         dataDevices = data.data;
-      }).finally(() => setLoading(false))
+      })
 
       return {
         items: dataDevices,
@@ -69,66 +65,6 @@ export const TableWrapper = ({ filter = '', select = true }) => {
       };
     },
   });
-
-  useEffect(() => {
-    // Función para obtener los datos más recientes desde la base de datos
-    const fetchCurrentData = async (id: any) => {
-      const { data, error } = await supabase
-        .from('devices')
-        .select('*')
-        .eq('id', id) // Asegúrate de poner la id adecuada
-        .single();
-
-      if (error) {
-        console.error('Error fetching current data:', error);
-        return null;
-      }
-      return data;
-    };
-
-    // Suscribirse a los cambios
-    const subscription = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'devices' },
-        async (value) => {
-          // Verificar que sea un cambio en la tabla devices
-          const newData = value.new;
-
-          // Excluir 'last_update' y 'status' de la comparación
-          const { last_update, status, public_ip, ...relevantNewData } = newData;
-
-          // Consultar la base de datos para obtener el estado actual
-          const currentData = await fetchCurrentData(newData?.id);
-
-          // Si no pudimos obtener los datos actuales, no hacemos nada
-          if (!currentData) return;
-
-          // Excluir también last_update y status del objeto de datos actual
-          const { last_update: currentLastUpdate, status: currentStatusm, public_ip: currePublicIp, ...relevantCurrentData } = currentData;
-
-          // Comparar los datos relevantes (sin last_update ni status)
-          const hasChanges = Object.keys(relevantNewData).some(
-            (key) => relevantNewData[key] !== relevantCurrentData[key]
-          );
-
-          if (hasChanges) {
-            console.log('Detected relevant changes: ', relevantNewData);
-            // Aquí puedes realizar la acción que necesites, como recargar los datos
-            list.reload(); // Lógica para recargar los datos si es necesario
-          } else {
-            console.log('Change in last_update or status, ignoring...');
-          }
-        }
-      )
-      .subscribe();
-
-    // Cleanup del efecto (desuscripción cuando el componente se desmonta)
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 
 
   function handleRemoveMultipleDevices(): void {
@@ -193,10 +129,10 @@ export const TableWrapper = ({ filter = '', select = true }) => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={loading ? 'Cargando...' : 'No hay dispositivos conectados a su cuenta actualmente, por favor, añade uno.'}
-          isLoading={loading}
+        <TableBody emptyContent={list.isLoading ? 'Cargando...' : 'No hay dispositivos conectados a su cuenta actualmente, por favor, añade uno.'}
+          isLoading={list.isLoading}
           loadingContent={<Spinner label="" />}
-          loadingState={loading ? 'loading' : 'idle'}
+          loadingState={list.isLoading ? 'loading' : 'idle'}
           items={(filterDevices(list.items))}>
           {(item) => (
             <TableRow key={item.id}>

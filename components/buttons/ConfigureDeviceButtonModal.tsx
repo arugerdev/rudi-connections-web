@@ -2,7 +2,7 @@
 import { LoginSchema } from "@/helpers/schemas";
 import { ConfigFormType } from "@/helpers/types";
 import { createClient } from "@/utils/supabase/client";
-import { Button, Checkbox, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Select, SelectItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { Form, Formik } from "formik";
 import router from "next/router";
 import { useState, useEffect, useCallback } from "react";
@@ -59,14 +59,15 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <Formik
-                            initialValues={initialValues}
-                            onSubmit={handleConfigSubmit}>
-                            {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
-                                <form action="javascript:void(0)" className="w-full flex flex-col" onSubmit={() => handleSubmit}>
 
-                                    <ModalHeader className="flex flex-col gap-1">Configuración de dispositivo - {config.deviceName}</ModalHeader>
-                                    <ModalBody>
+
+                        <ModalHeader className="flex flex-col gap-1">Configuración de dispositivo - {config.deviceName}</ModalHeader>
+                        <ModalBody>
+                            <Formik
+                                initialValues={initialValues}
+                                onSubmit={handleConfigSubmit}>
+                                {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
+                                    <form action="javascript:void(0)" className="w-full flex flex-col" onSubmit={() => handleSubmit}>
                                         < div className='flex flex-col w-full gap-4 mb-4'>
                                             <Input
                                                 labelPlacement='outside'
@@ -116,25 +117,110 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                     color="default"
                                                     onValueChange={(value: any) => setFieldValue('networkConfig.dns', value)}
                                                 />
+                                                <section className="flex flex-row justify-center items-start gap-16">
+                                                    {config.networkConfig.interfaces.map((inter, key) => {
+                                                        return (
+                                                            <section className="flex flex-col w-full">
+                                                                <h1 className="font-bold text-xl p-0">{inter.name}{<span className="text-danger select-none	"></span>
+                                                                }</h1>
+                                                                <h2 className="font-bold text-sm pb-4 p-0">{inter.type}</h2>
+                                                                <div className="flex flex-col gap-4">
+                                                                    {inter.type !== 'modem' &&
+                                                                        <>
+                                                                            <h3 className="font-semibold">Modo de IP</h3>
+                                                                            <Select
+                                                                                defaultSelectedKeys={[inter.method ?? 'static']}
+                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].method`)}
+                                                                                isRequired label="Modo"
+                                                                            >
+                                                                                <SelectItem key={'static'}>Estatico</SelectItem>
+                                                                                <SelectItem key={'dhcp'}>DHCP4</SelectItem>
+                                                                            </Select>
+                                                                        </>
+                                                                    }
+                                                                    {inter.type === 'wifi' &&
+                                                                        <>
+                                                                            < Input
+                                                                                labelPlacement='outside'
+                                                                                label="SSID"
+                                                                                name={`networkConfig.interfaces[${key}].ssid`}
+                                                                                placeholder={inter.ssid}
+                                                                                variant="bordered"
+                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].ssid`)}
+                                                                                isRequired
+                                                                                required={true}
+                                                                                defaultValue={inter.ssid}
+                                                                            />
+                                                                            <Input
+                                                                                labelPlacement='outside'
+                                                                                label="Contraseña"
+                                                                                name={`networkConfig.interfaces[${key}].password`}
+                                                                                placeholder={inter.password}
+                                                                                variant="bordered"
+                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].password`)}
+                                                                                isRequired
+                                                                                required={true}
+                                                                                defaultValue={inter.password}
+                                                                            />
+                                                                        </>
+
+                                                                    }
+                                                                    {inter.type === 'modem' &&
+                                                                        <>
+                                                                            < Input
+                                                                                labelPlacement='outside'
+                                                                                label="Proveedor"
+                                                                                name={`networkConfig.interfaces[${key}].provider`}
+                                                                                placeholder={inter.provider}
+                                                                                variant="bordered"
+                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].provider`)}
+                                                                                isRequired
+                                                                                required={true}
+                                                                                defaultValue={inter.provider}
+                                                                            />
+                                                                            <Input
+                                                                                labelPlacement='outside'
+                                                                                label="PIN"
+                                                                                name='simConfig.pin'
+                                                                                placeholder={config.simConfig.pin}
+                                                                                variant="bordered"
+                                                                                onChange={handleChange('simConfig.pin')}
+                                                                                isRequired
+                                                                                required={true}
+                                                                                defaultValue={config.simConfig.pin}
+                                                                            />
+                                                                        </>
+
+                                                                    }
+                                                                </div>
+
+                                                            </section>
+                                                        )
+                                                    })
+
+                                                    }
+                                                </section>
                                             </section>
 
                                         </div>
+                                        <ModalFooter>
+                                            <Button color="danger" variant="flat" onPress={onClose}>
+                                                Cancelar
+                                            </Button>
+                                            <Button color="primary"
+                                                type="submit"
+                                                isLoading={loading}
+                                                onPress={() => handleSubmit()}
+                                            >
+                                                Guardar Configuración
+                                            </Button>
+                                        </ModalFooter>
+                                    </form >
+                                )}
+                            </Formik >
+                        </ModalBody>
 
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button color="danger" variant="flat" onPress={onClose}>
-                                            Cancelar
-                                        </Button>
-                                        <Button color="primary"
-                                            type="submit"
-                                            isLoading={loading}
-                                            onPress={() => handleSubmit()}>
-                                            Guardar Configuración
-                                        </Button>
-                                    </ModalFooter>
-                                </form >
-                            )}
-                        </Formik >
+
                     </>
                 )}
             </ModalContent>

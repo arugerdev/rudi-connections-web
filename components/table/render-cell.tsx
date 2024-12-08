@@ -24,7 +24,8 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
     if (data.error) {
       throw data.error
     }
-    // window.location.reload()
+
+    resetList()
   }
 
   // @ts-ignore

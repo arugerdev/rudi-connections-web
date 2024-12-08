@@ -26,16 +26,18 @@ export default async function handler(req: NextApiRequest,
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
     const { data, error } = await supabase
         .from('devices')
-        .select('public_ip, private_key, public_key, preshared_key, dns, name')
+        .select('public_ip, private_key, public_key, preshared_key, dns, config')
         .eq('key', deviceKey)
         .single();
+
+    console.log(data)
 
     if (error || !data) {
         return res.status(500).json({ message: 'Error al obtener los datos del dispositivo', error });
     }
 
     // Datos del dispositivo desde Supabase
-    const { public_ip, private_key, public_key, preshared_key, dns, name } = data;
+    const { public_ip, private_key, public_key, preshared_key, dns, config } = data;
 
     // Generación del archivo de configuración de WireGuard
     const wireguardConfig = `
@@ -53,7 +55,7 @@ PersistentKeepalive = 25
   `;
 
     // Define el nombre del archivo
-    const fileName = `${name}.conf`;
+    const fileName = `${config.deviceName}.conf`;
 
     // Establecer encabezados para la descarga del archivo
     res.setHeader('Content-Type', 'application/octet-stream');

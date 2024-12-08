@@ -35,7 +35,7 @@ export const AddDevice = () => {
         alert(data.error)
         throw data.error
       }
-      // window.location.reload()
+      window.location.reload()
 
       onOpenChange()
     },
