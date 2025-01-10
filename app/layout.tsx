@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
 
-window.toast = toast
+(window as any).toast = toast
   
   return (
     <html lang='en'>
