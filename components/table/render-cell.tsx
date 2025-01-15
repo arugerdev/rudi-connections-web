@@ -123,7 +123,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
                 content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                 color="primary"
               >
-                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === ''} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
+                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
                   Conectar
                 </Button >
               </Tooltip>

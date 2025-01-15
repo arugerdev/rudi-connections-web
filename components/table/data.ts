@@ -10,5 +10,5 @@ export const columns = [
 export const getDevices = async () => {
    const supabase = createClient()
    const { data: user } = await supabase.auth.getUser()
-   return await supabase.from('devices').select('*').eq('owned_by', user.user?.id).order('id', { ascending: true })
+   return await supabase.from('devices').select('*').eq('owned_by', user.user?.id).order('status', { ascending: true })
 }

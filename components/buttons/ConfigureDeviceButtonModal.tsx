@@ -8,6 +8,7 @@ import router from "next/router";
 import { useState, useEffect, useCallback } from "react";
 import { signInWithEmail } from "../auth/supabase-auth";
 import { InputsArray } from "../inputs/InputsArray";
+import toast from "react-hot-toast";
 
 export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { device: { id: number, config: ConfigFormType }, resetList: CallableFunction }) => {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -36,6 +37,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
             if (!error) {
                 onClose()
                 resetList()
+                toast.success('Configuración guardada correctamente')
             }
         },
         [router]

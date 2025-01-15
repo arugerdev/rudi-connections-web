@@ -12,6 +12,7 @@ import { DarkModeSwitch } from "./darkmodeswitch";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/auth-js";
+import toast from "react-hot-toast";
 
 export const UserDropdown = () => {
   const supabase = createClient()
@@ -30,6 +31,7 @@ export const UserDropdown = () => {
   const handleLogout = useCallback(async () => {
     supabase.auth.signOut()
     router.replace("/login");
+    toast.success('Sesión cerrada correctamente')
   }, [router]);
 
   return (

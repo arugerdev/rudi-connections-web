@@ -12,7 +12,7 @@ export const CardAllDevices = () => {
     const supabase = createClient()
 
     supabase
-      .channel('schema-db-changes')
+      .channel('schema-allDevices-db-changes')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'devices' },

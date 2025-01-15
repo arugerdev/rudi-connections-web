@@ -66,6 +66,42 @@ export const TableWrapper = ({ filter = '', select = true }) => {
     },
   });
 
+  useEffect(() => {
+    const taskListener = supabase
+      .channel("devices-changes")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "devices" },
+        (payload) => {
+
+          if (findDifference(payload.new, payload.old).filter((key) => key !== 'last_updated' && key !== 'config').length > 0) {
+            list.reload();
+          }
+        }
+      )
+      .subscribe();
+
+  }, []);
+
+
+  function findDifference(obj1: any, obj2: any) {
+    const diffKeys = [];
+    for (const key in obj1) {
+      if (!(key in obj2) ||
+        obj1[key] !== obj2[key]) {
+        diffKeys.push(key);
+      }
+    }
+    for (const key in obj2) {
+      if (!(key in obj1) ||
+        obj1[key] !== obj2[key]) {
+        if (!diffKeys.includes(key)) {
+          diffKeys.push(key);
+        }
+      }
+    }
+    return diffKeys;
+  }
 
   function handleRemoveMultipleDevices(): void {
     const supabase = createClient()
@@ -95,7 +131,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
         <section className="flex flex-row gap-2 items-center justify-between text-foreground-400 font-semibold text-sm">
           <p>Dispositivos seleccionados: {(selectedKeys == 'all' ? list.items.length : selectedKeys.size)}</p>
           <Tooltip
-            content="Borrar dispositivo"
+            content="Borrar varios dispositivos"
             color="danger"
           >
             <Button isDisabled={(selectedKeys == 'all' ? false : selectedKeys.size <= 0)} isIconOnly variant='light' onClick={() => handleRemoveMultipleDevices()}>

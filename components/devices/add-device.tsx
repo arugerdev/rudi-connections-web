@@ -15,9 +15,10 @@ import {
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import ReactInputMask from 'react-input-mask'
 export const AddDevice = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const router = useRouter();
 
   const initialValues: DeviceIdFormType = {
@@ -30,14 +31,14 @@ export const AddDevice = () => {
       const supabase = createClient()
       const { data: user } = await supabase.auth.getUser()
 
-      const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq('key', values.id.toUpperCase().replaceAll('-', ''));
-      if (data.error) {
-        alert(data.error)
+      const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq('key', values.id.toUpperCase().replaceAll('-', '')).select('id');
+      if (data.error || data?.data?.length === 0) {
+        toast.error(`Error al añadir el dispositivo, dispositivo no encontrado, por favor, revisa la clave introducida`)
         throw data.error
       }
-      window.location.reload()
 
-      onOpenChange()
+      toast.success(`Dispositivo añadido correctamente`)
+      onClose()
     },
     [router]
   )
