@@ -10,6 +10,7 @@ import { redirect, useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { signInWithEmail } from "./supabase-auth";
 import { createClient } from "@supabase/supabase-js";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const router = useRouter();
@@ -27,9 +28,11 @@ export const Login = () => {
       signInWithEmail(values.email, values.password).then((data) => {
 
         setLoading(false)
+        toast.success("¡Inicio de sesión realizado correctamente! 🎉✅")
         router.push('/')
       }).catch((err) => {
         setLoading(false)
+        toast.error("Ha ocurrido un error en el inicio de sesión 😢")
         console.log(err)
 
         alert(err)

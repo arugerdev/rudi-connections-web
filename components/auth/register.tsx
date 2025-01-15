@@ -8,6 +8,7 @@ import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { signUpNewUser } from "./supabase-auth";
+import toast from "react-hot-toast";
 export const Register = () => {
   const router = useRouter();
 
@@ -23,8 +24,10 @@ export const Register = () => {
       if (values.password !== values.confirmPassword) return
 
       signUpNewUser(values.name, values.email, values.password).then((data) => {
+        toast.success("¡Registro realizado correctamente! 🎉✅")
         router.push("/");
       }).catch((err) => {
+        toast.error("Ha ocurrido un error al realizar el registro 😢: " + JSON.stringify(err))
         alert(err)
         return
       })
