@@ -10,7 +10,7 @@ import { signInWithEmail } from "../auth/supabase-auth";
 import { InputsArray } from "../inputs/InputsArray";
 import toast from "react-hot-toast";
 
-export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { device: { id: number, config: ConfigFormType }, resetList: CallableFunction }) => {
+export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { device: { id: number, config: ConfigFormType, type: string | null }, resetList: CallableFunction }) => {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const supabase = createClient()
     const [config, setConfig] = useState<ConfigFormType>(device?.config)
@@ -70,141 +70,162 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                 onSubmit={handleConfigSubmit}>
                                 {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                                     <form action="javascript:void(0)" className="w-full flex flex-col" onSubmit={() => handleSubmit}>
-                                        < div className='flex flex-col w-full gap-4 mb-4'>
-                                            <Input
-                                                labelPlacement='outside'
-                                                label="Nombre del dispositivo"
-                                                name="deviceName"
-                                                placeholder={config.deviceName}
-                                                variant="bordered"
-                                                onChange={handleChange("deviceName")}
-                                                isRequired
-                                                required={true}
-                                                defaultValue={config.deviceName}
-                                            />
-                                            <section className="flex flex-col mt-4 gap-2">
-                                                <h1 className="font-bold">Configuración de red</h1>
-                                                <p className="text-danger text-sm">Por favor cambie los valores solo de las configuraciones que entienda, estas pueden hacer perder la conexión del dispositivo a internet y tener que reiniciarlo físicamente.</p>
+                                        {(device?.type === 'rud1') &&
+                                            < div className='flex flex-col w-full gap-4 mb-4'>
                                                 <Input
                                                     labelPlacement='outside'
-                                                    label="IP Local del dispositivo"
-                                                    name="networkConfig.ipAddress"
-                                                    placeholder={config.networkConfig.ipAddress}
+                                                    label="Nombre del dispositivo"
+                                                    name="deviceName"
+                                                    placeholder={config.deviceName}
                                                     variant="bordered"
-                                                    onChange={handleChange("networkConfig.ipAddress")}
+                                                    onChange={handleChange("deviceName")}
                                                     isRequired
                                                     required={true}
-                                                    defaultValue={config.networkConfig.ipAddress}
-
+                                                    defaultValue={config.deviceName}
                                                 />
-                                                <Input
-                                                    labelPlacement='outside'
-                                                    label="Puerta de enlace"
-                                                    name="networkConfig.gateway"
-                                                    placeholder={config.networkConfig.gateway}
-                                                    variant="bordered"
-                                                    onChange={handleChange("networkConfig.gateway")}
-                                                    isRequired
-                                                    required={true}
-                                                    defaultValue={config.networkConfig.gateway}
+                                                <section className="flex flex-col mt-4 gap-2">
+                                                    <h1 className="font-bold">Configuración de red</h1>
+                                                    <p className="text-danger text-sm">Por favor cambie los valores solo de las configuraciones que entienda, estas pueden hacer perder la conexión del dispositivo a internet y tener que reiniciarlo físicamente.</p>
+                                                    <Input
+                                                        labelPlacement='outside'
+                                                        label="IP Local del dispositivo"
+                                                        name="networkConfig.ipAddress"
+                                                        placeholder={config.networkConfig.ipAddress}
+                                                        variant="bordered"
+                                                        onChange={handleChange("networkConfig.ipAddress")}
+                                                        isRequired
+                                                        required={true}
+                                                        defaultValue={config.networkConfig.ipAddress}
 
-                                                />
-                                                <h1 className="font-semibold">DNS{<span className="text-danger select-none	">*</span>
-                                                }</h1>
-                                                <InputsArray className=""
-                                                    placeholders='0.0.0.0'
-                                                    initialValues={config.networkConfig.dns}
-                                                    min={1}
-                                                    max={4}
-                                                    color="default"
-                                                    onValueChange={(value: any) => setFieldValue('networkConfig.dns', value)}
-                                                />
-                                                <section className="flex flex-col md:flex-row justify-center items-start gap-16">
-                                                    {config.networkConfig.interfaces.map((inter, key) => {
-                                                        return (
-                                                            <section key={inter.name + '_' + inter.type + '_' + key} className="flex flex-col w-full">
-                                                                <h1 className="font-bold text-xl p-0">{inter.name}{<span className="text-danger select-none	"></span>
-                                                                }</h1>
-                                                                <h2 className="font-bold text-sm pb-4 p-0">{inter.type}</h2>
-                                                                <div className="flex flex-col gap-4">
-                                                                    {inter.type !== 'modem' &&
-                                                                        <>
-                                                                            <h3 className="font-semibold">Modo de IP</h3>
-                                                                            <Select
-                                                                                defaultSelectedKeys={[inter.method ?? 'static']}
-                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].method`)}
-                                                                                isRequired label="Modo"
-                                                                            >
-                                                                                <SelectItem key={'static'}>Estatico</SelectItem>
-                                                                                <SelectItem key={'dhcp'}>DHCP4</SelectItem>
-                                                                            </Select>
-                                                                        </>
-                                                                    }
-                                                                    {inter.type === 'wifi' &&
-                                                                        <>
-                                                                            < Input
-                                                                                labelPlacement='outside'
-                                                                                label="SSID"
-                                                                                name={`networkConfig.interfaces[${key}].ssid`}
-                                                                                placeholder={inter.ssid}
-                                                                                variant="bordered"
-                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].ssid`)}
-                                                                                isRequired
-                                                                                required={true}
-                                                                                defaultValue={inter.ssid}
-                                                                            />
-                                                                            <Input
-                                                                                labelPlacement='outside'
-                                                                                label="Contraseña"
-                                                                                name={`networkConfig.interfaces[${key}].password`}
-                                                                                placeholder={inter.password}
-                                                                                variant="bordered"
-                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].password`)}
-                                                                                isRequired
-                                                                                required={true}
-                                                                                defaultValue={inter.password}
-                                                                            />
-                                                                        </>
+                                                    />
+                                                    <Input
+                                                        labelPlacement='outside'
+                                                        label="Puerta de enlace"
+                                                        name="networkConfig.gateway"
+                                                        placeholder={config.networkConfig.gateway}
+                                                        variant="bordered"
+                                                        onChange={handleChange("networkConfig.gateway")}
+                                                        isRequired
+                                                        required={true}
+                                                        defaultValue={config.networkConfig.gateway}
 
-                                                                    }
-                                                                    {inter.type === 'modem' &&
-                                                                        <>
-                                                                            < Input
-                                                                                labelPlacement='outside'
-                                                                                label="Proveedor"
-                                                                                name={`networkConfig.interfaces[${key}].provider`}
-                                                                                placeholder={inter.provider}
-                                                                                variant="bordered"
-                                                                                onChange={handleChange(`networkConfig.interfaces[${key}].provider`)}
-                                                                                isRequired
-                                                                                required={true}
-                                                                                defaultValue={inter.provider}
-                                                                            />
-                                                                            <Input
-                                                                                labelPlacement='outside'
-                                                                                label="PIN"
-                                                                                name='simConfig.pin'
-                                                                                placeholder={config.simConfig.pin}
-                                                                                variant="bordered"
-                                                                                onChange={handleChange('simConfig.pin')}
-                                                                                isRequired
-                                                                                required={true}
-                                                                                defaultValue={config.simConfig.pin}
-                                                                            />
-                                                                        </>
+                                                    />
+                                                    <h1 className="font-semibold">DNS{<span className="text-danger select-none	">*</span>
+                                                    }</h1>
+                                                    <InputsArray className=""
+                                                        placeholders='0.0.0.0'
+                                                        initialValues={config.networkConfig.dns}
+                                                        min={1}
+                                                        max={4}
+                                                        color="default"
+                                                        onValueChange={(value: any) => setFieldValue('networkConfig.dns', value)}
+                                                    />
+                                                    <section className="flex flex-col md:flex-row justify-center items-start gap-16">
+                                                        {config.networkConfig.interfaces.map((inter, key) => {
+                                                            return (
+                                                                <section key={inter.name + '_' + inter.type + '_' + key} className="flex flex-col w-full">
+                                                                    <h1 className="font-bold text-xl p-0">{inter.name}{<span className="text-danger select-none	"></span>
+                                                                    }</h1>
+                                                                    <h2 className="font-bold text-sm pb-4 p-0">{inter.type}</h2>
+                                                                    <div className="flex flex-col gap-4">
+                                                                        {inter.type !== 'modem' &&
+                                                                            <>
+                                                                                <h3 className="font-semibold">Modo de IP</h3>
+                                                                                <Select
+                                                                                    defaultSelectedKeys={[inter.method ?? 'static']}
+                                                                                    onChange={handleChange(`networkConfig.interfaces[${key}].method`)}
+                                                                                    isRequired label="Modo"
+                                                                                >
+                                                                                    <SelectItem key={'static'}>Estatico</SelectItem>
+                                                                                    <SelectItem key={'dhcp'}>DHCP4</SelectItem>
+                                                                                </Select>
+                                                                            </>
+                                                                        }
+                                                                        {inter.type === 'wifi' &&
+                                                                            <>
+                                                                                < Input
+                                                                                    labelPlacement='outside'
+                                                                                    label="SSID"
+                                                                                    name={`networkConfig.interfaces[${key}].ssid`}
+                                                                                    placeholder={inter.ssid}
+                                                                                    variant="bordered"
+                                                                                    onChange={handleChange(`networkConfig.interfaces[${key}].ssid`)}
+                                                                                    isRequired
+                                                                                    required={true}
+                                                                                    defaultValue={inter.ssid}
+                                                                                />
+                                                                                <Input
+                                                                                    labelPlacement='outside'
+                                                                                    label="Contraseña"
+                                                                                    name={`networkConfig.interfaces[${key}].password`}
+                                                                                    placeholder={inter.password}
+                                                                                    variant="bordered"
+                                                                                    onChange={handleChange(`networkConfig.interfaces[${key}].password`)}
+                                                                                    isRequired
+                                                                                    required={true}
+                                                                                    defaultValue={inter.password}
+                                                                                />
+                                                                            </>
 
-                                                                    }
-                                                                </div>
+                                                                        }
+                                                                        {inter.type === 'modem' &&
+                                                                            <>
+                                                                                < Input
+                                                                                    labelPlacement='outside'
+                                                                                    label="Proveedor"
+                                                                                    name={`networkConfig.interfaces[${key}].provider`}
+                                                                                    placeholder={inter.provider}
+                                                                                    variant="bordered"
+                                                                                    onChange={handleChange(`networkConfig.interfaces[${key}].provider`)}
+                                                                                    isRequired
+                                                                                    required={true}
+                                                                                    defaultValue={inter.provider}
+                                                                                />
+                                                                                <Input
+                                                                                    labelPlacement='outside'
+                                                                                    label="PIN"
+                                                                                    name='simConfig.pin'
+                                                                                    placeholder={config.simConfig.pin}
+                                                                                    variant="bordered"
+                                                                                    onChange={handleChange('simConfig.pin')}
+                                                                                    isRequired
+                                                                                    required={true}
+                                                                                    defaultValue={config.simConfig.pin}
+                                                                                />
+                                                                            </>
 
-                                                            </section>
-                                                        )
-                                                    })
+                                                                        }
+                                                                    </div>
 
-                                                    }
+                                                                </section>
+                                                            )
+                                                        })
+
+                                                        }
+                                                    </section>
                                                 </section>
-                                            </section>
 
-                                        </div>
+                                            </div>
+                                        }
+
+                                        {(device?.type === 'dum1') &&
+                                            < div className='flex flex-col w-full gap-4 mb-4'>
+                                                <Input
+                                                    labelPlacement='outside'
+                                                    label="Nombre del dispositivo"
+                                                    name="deviceName"
+                                                    placeholder={config.deviceName}
+                                                    variant="bordered"
+                                                    onChange={handleChange("deviceName")}
+                                                    isRequired
+                                                    required={true}
+                                                    defaultValue={config.deviceName}
+                                                />
+                                                <section className="flex flex-col mt-4 gap-2">
+
+                                                </section>
+
+                                            </div>}
                                         <ModalFooter>
                                             <Button color="danger" variant="flat" onPress={onClose}>
                                                 Cancelar
