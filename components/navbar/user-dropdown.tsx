@@ -55,9 +55,9 @@ export const UserDropdown = () => {
           <p>Sesión iniciada como:</p>
           <p>{user?.email}</p>
         </DropdownItem>
-        <DropdownItem isDisabled key='settings'>Ajustes - EN DESARROLLO 🚧</DropdownItem>
-        <DropdownItem isDisabled key='analytics'>Analíticas - EN DESARROLLO 🚧</DropdownItem>
-        <DropdownItem isDisabled key='help_and_feedback'>Ayuda - EN DESARROLLO 🚧</DropdownItem>
+        <DropdownItem isDisabled key='settings'>Ajustes</DropdownItem>
+        <DropdownItem isDisabled key='analytics'>Analíticas</DropdownItem>
+        <DropdownItem isDisabled key='help_and_feedback'>Ayuda</DropdownItem>
         <DropdownItem
           key='logout'
           color='danger'

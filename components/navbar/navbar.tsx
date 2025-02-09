@@ -31,7 +31,7 @@ export const NavbarWrapper = ({ children }: Props) => {
               input: "w-full",
               mainWrapper: "w-full",
             }}
-            placeholder="Buscar...  - EN DESARROLLO 🚧"
+            placeholder="Buscar...  "
           />
         </NavbarContent>
         <NavbarContent

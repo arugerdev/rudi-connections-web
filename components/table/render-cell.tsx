@@ -31,22 +31,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
   // @ts-ignore
   const cellValue = device[columnKey];
   switch (columnKey) {
-    case "type":
-      return (
-        <Chip
-          size="sm"
-          variant="flat"
-          color={
-            cellValue === "rud1"
-              ? "primary"
-              : cellValue === "dum1"
-                ? "secondary"
-                : "warning"
-          }
-        >
-          <span className="capitalize text-xs">{device.type}</span>
-        </Chip>
-      );
+
     case "name":
       return (
         <strong>{device?.config.deviceName}</strong>
@@ -135,28 +120,17 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
               <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
             <div>
-              {(device.type === 'rud1') &&
-                <Tooltip
-                  content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
-                  color="primary"
-                >
-                  <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
-                    Conectar
-                  </Button >
+              <Tooltip
+                content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
+                color="primary"
+              >
+                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
+                  Conectar
+                </Button >
 
-                </Tooltip>
-              }
+              </Tooltip>
 
-              {(device.type === 'dum1') &&
-                <Tooltip
-                  content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
-                  color="primary"
-                >
-                  <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
-                    Entrar
-                  </Button >
-                </Tooltip>
-              }
+
             </div>
           </section>
         </div>

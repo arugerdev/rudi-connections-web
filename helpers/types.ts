@@ -47,5 +47,20 @@ export type ConfigFormType = {
   },
   simConfig: {
     pin: string
+  },
+  services: {
+    virtualHere: {
+      enabled: boolean,
+      port: number,
+      config: object | null
+    },
+    wireGuard: {
+      enabled: boolean,
+      config: object | null
+    },
+    sumi: {
+      enabled: boolean,
+      config: object | null
+    }
   }
 };
