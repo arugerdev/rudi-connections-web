@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest,
     // Generación del archivo de configuración de WireGuard
     const wireguardConfig = `
 [Interface]
-Address = 10.7.0.2/24
+Address = ${config.networkConfig.ipAddress}
 DNS = ${config.vpnConfig.dns}
 PrivateKey = ${config.vpnConfig.privateKey}
 

@@ -82,7 +82,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                 required={true}
                                                 defaultValue={config.deviceName}
                                             />
-                                            <Accordion variant="shadow">
+                                            <Accordion variant="shadow" selectionMode="multiple">
                                                 <AccordionItem key="1" aria-label="Configuración de red" title="Configuración de red">
                                                     <section className="flex flex-col mt-4 gap-2">
                                                         <p className="text-danger text-sm">Por favor cambie los valores solo de las configuraciones que entienda, estas pueden hacer perder la conexión del dispositivo a internet y tener que reiniciarlo físicamente.</p>
@@ -120,7 +120,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                             color="default"
                                                             onValueChange={(value: any) => setFieldValue('networkConfig.dns', value)}
                                                         />
-                                                        <Accordion variant="shadow">
+                                                        <Accordion variant="shadow" selectionMode="multiple">
                                                             <AccordionItem key="1" aria-label="Configuración de Adapatadores" title="Configuración de Adapatadores">
                                                                 <section className="flex flex-col md:flex-row justify-center items-start gap-16">
                                                                     {config.networkConfig.interfaces.map((inter, key) => {
@@ -211,10 +211,41 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                                                 </AccordionItem>
 
                                                 <AccordionItem key="2" aria-label="Servicios" title="Servicios">
-                                                    <section className="flex flex-row mt-4 gap-2">
-                                                        <p>Sumi - Servicio Universal de Monitoreo Industrial</p>
-                                                        <Switch onChange={handleChange("services.sumi.enabled")} name="services.sumi.enabled" defaultSelected={config?.services?.sumi?.enabled} aria-label="Sumi - Servicio Universal de Monitoreo Industrial" />
-                                                    </section>
+                                                    <Accordion variant="shadow" selectionMode="multiple">
+                                                        <AccordionItem key="1" aria-label="Servicios" startContent={
+                                                            <Switch onChange={handleChange("services.sumi.enabled")} name="services.sumi.enabled" defaultSelected={config?.services?.sumi?.enabled} aria-label="Sumi - Servicio Universal de Monitoreo Industrial" />
+                                                        } title="Sumi - Servicio Universal de Monitoreo Industrial">
+                                                            <section className="flex flex-col gap-4">
+                                                                <Input
+                                                                    labelPlacement='outside'
+                                                                    label="URL"
+                                                                    name="services.sumi.url"
+                                                                    placeholder={'https://sumi.com'}
+                                                                    variant="bordered"
+                                                                    onChange={handleChange("services.sumi.url")}
+                                                                    isRequired
+                                                                    required={true}
+                                                                    // defaultValue={config.services.sumi.url}
+                                                                    defaultValue={'https://sumi.com'}
+                                                                />
+                                                                <Input
+                                                                    labelPlacement='outside'
+                                                                    label="API Key"
+                                                                    name="services.sumi.apiKey"
+                                                                    // placeholder={config.services.sumi.apiKey}
+                                                                    placeholder={'********'}
+                                                                    variant="bordered"
+                                                                    onChange={handleChange("services.sumi.apiKey")}
+                                                                    isRequired
+                                                                    required={true}
+                                                                    // defaultValue={config.services.sumi.apiKey}
+                                                                    defaultValue={'********'}
+                                                                />
+                                                            </section>
+                                                        </AccordionItem>
+
+
+                                                    </Accordion>
                                                 </AccordionItem>
                                             </Accordion>
 
@@ -242,7 +273,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                     </>
                 )}
             </ModalContent>
-        </Modal>
+        </Modal >
 
     </>
     )
