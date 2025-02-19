@@ -17,16 +17,11 @@ export type DeviceIdFormType = {
 
 
 export type ConfigFormType = {
+  tailscale: {
+    website: string | null,
+    public_ip: string | null
+  };
   deviceName: string;
-  vpnConfig: {
-    privateKey: string;
-    publicKey: string;
-    presharedKey: string;
-    endpoint: string;
-    allowedIPs: string;
-    dns: string;
-    persistentKeepalive: number;
-  },
   systemConfig: {
     firstRun: boolean,
     passwordHash: string,
@@ -53,11 +48,7 @@ export type ConfigFormType = {
       enabled: boolean,
       port: number,
       config: object | null
-    },
-    wireGuard: {
-      enabled: boolean,
-      config: object | null
-    },
+    }
     sumi: {
       enabled: boolean,
       config: object | null

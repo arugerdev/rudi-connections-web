@@ -34,8 +34,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "pages/api/get-wireguard.ts",
-    "pages/api/add-device.js"
   ],
   "exclude": [
     "node_modules"

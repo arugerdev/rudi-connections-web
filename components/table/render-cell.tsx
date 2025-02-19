@@ -27,7 +27,15 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
 
     resetList()
   }
-
+  async function connectVPN() {
+    try {
+      await fetch('http://localhost:3001/connect-vpn', { method: 'POST' });
+      alert('VPN conectándose...');
+    } catch (error) {
+      console.error('Error al conectar la VPN:', error);
+      alert('No se pudo conectar a la VPN.');
+    }
+  }
   // @ts-ignore
   const cellValue = device[columnKey];
   switch (columnKey) {
@@ -68,23 +76,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
       );
 
     case "actions":
-      const handleDownload = async () => {
-        try {
-          const response = await (await fetch(`/api/get-wireguard?deviceKey=${device?.key}`)).json();
-          if (response.message !== 'OK') {
-            throw new Error('Error al generar el archivo');
-          }
-          const blob = new Blob([response.result], {
-            type: 'text/plain'
-          });;
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = `${device?.config.deviceName}.conf`; // Nombre del archivo de WireGuard
-          link.click();
-        } catch (error) {
-          alert(error);
-        }
-      };
+
 
       return (
         <div className="flex items-center flex-row justify-end gap-8">
@@ -124,7 +116,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
                 content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                 color="primary"
               >
-                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => handleDownload()}>
+                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => connectVPN()}>
                   Conectar
                 </Button >
 

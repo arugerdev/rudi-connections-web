@@ -2,7 +2,7 @@
 import { LoginSchema } from "@/helpers/schemas";
 import { ConfigFormType } from "@/helpers/types";
 import { createClient } from "@/utils/supabase/client";
-import { Button, Select, SelectItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, Accordion, AccordionItem, Switch } from "@nextui-org/react";
+import { Button, Select, SelectItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, Accordion, AccordionItem, Switch, Link } from "@nextui-org/react";
 import { Form, Formik } from "formik";
 import router from "next/router";
 import { useState, useEffect, useCallback } from "react";
@@ -10,7 +10,11 @@ import { signInWithEmail } from "../auth/supabase-auth";
 import { InputsArray } from "../inputs/InputsArray";
 import toast from "react-hot-toast";
 
-export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { device: { id: number, config: ConfigFormType, type: string | null }, resetList: CallableFunction }) => {
+export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: {
+    device: {
+        secret_key: string; key: string; id: number, config: ConfigFormType, type: string | null
+    }, resetList: CallableFunction
+}) => {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const supabase = createClient()
     const [config, setConfig] = useState<ConfigFormType>(device?.config)
@@ -44,7 +48,11 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
     );
 
     return (<>
-        <Button color="secondary" className="cursor-pointer" variant="flat" onClick={onOpen}>
+
+        <Button as={Link} isDisabled={!device.config?.tailscale?.website || device.config?.tailscale?.website == ''} rel="noopener noreferrer" href={`//${device.config?.tailscale?.website}?key=${device?.secret_key}&device=${device.key}` ?? ''} color="secondary" className="cursor-pointer" variant="flat">
+            Configurar
+        </Button >
+        {/* <Button color="secondary" className="cursor-pointer" variant="flat" onClick={onOpen}>
             Configurar
         </Button >
 
@@ -273,7 +281,7 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: { 
                     </>
                 )}
             </ModalContent>
-        </Modal >
+        </Modal > */}
 
     </>
     )
