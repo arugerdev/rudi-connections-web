@@ -18,7 +18,9 @@ export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: {
 }) => {
 
     return (
-        <Button as={Link} isDisabled={!device.config?.tailscale?.website || device.config?.tailscale?.website == '' || device.status !== 'running'} rel="noopener noreferrer" target="_blank" href={`http://${device.config?.tailscale?.website ?? 'rud1.es'}?key=${device?.secret_key ?? 'error'}&device=${device.key ?? 'error'}`} color="secondary" className="cursor-pointer" variant="flat">
+        <Button onClick={() => {
+            window.location.href = `http://${device.config?.tailscale?.website ?? 'rud1.es'}?key=${device?.secret_key ?? 'error'}&device=${device.key ?? 'error'}`
+        }} isDisabled={!device.config?.tailscale?.website || device.config?.tailscale?.website == '' || device.status !== 'running'} color="secondary" className="cursor-pointer" variant="flat">
             Configurar
         </Button >
     )
