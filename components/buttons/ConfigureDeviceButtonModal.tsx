@@ -13,12 +13,12 @@ import toast from "react-hot-toast";
 export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: {
     device: {
         status: string;
-        secret_key: string; key: string; id: number, config: ConfigFormType, type: string | null
+        key: string; id: number, config: ConfigFormType, type: string | null
     }, resetList: CallableFunction
 }) => {
 
     return (
-        <Button as={Link} isDisabled={!device.config?.tailscale?.public_ip || device.config?.tailscale?.public_ip == '' || device.status !== 'running'} rel="noopener noreferrer" target="_blank" href={`http://${device.config?.tailscale?.public_ip ?? 'rud1.es'}?key=${device?.secret_key ?? 'error'}&device=${device.key ?? 'error'}`} color="secondary" className="cursor-pointer" variant="flat">
+        <Button as={Link} isDisabled={!device.config?.tailscale?.public_ip || device.config?.tailscale?.public_ip == '' || device.status !== 'running'} rel="noopener noreferrer" target="_blank" href={`http://${device.config?.tailscale?.public_ip ?? 'rud1.es'}`} color="secondary" className="cursor-pointer" variant="flat">
             Configurar
         </Button >
     )
