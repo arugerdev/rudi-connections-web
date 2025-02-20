@@ -31,7 +31,6 @@ export const AddDevice = () => {
       const supabase = createClient()
       const { data: user } = await supabase.auth.getUser()
 
-      const dataGet = await supabase.from('devices').select('*').eq("key", values.id.toUpperCase().replaceAll('-', '')).filter("owned_by", "is", null);
       const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq("key", values.id.toUpperCase().replaceAll('-', '')).filter("owned_by", "is", null).select('id');
 
       if (data.error || data?.data?.length === 0) {
