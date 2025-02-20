@@ -104,19 +104,19 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
             <div>
               <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
-            <div>
+            {/* <div>
               <Tooltip
                 content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                 color="primary"
               >
-                <Button as={Link} href="https://tailscale.com/download" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
+                <Button as={Link} href="tailscale://up" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                   Conectar
                 </Button >
 
               </Tooltip>
 
 
-            </div>
+            </div> */}
           </section>
         </div>
       );
