@@ -31,7 +31,9 @@ export const AddDevice = () => {
       const supabase = createClient()
       const { data: user } = await supabase.auth.getUser()
 
-      const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq('key', values.id.toUpperCase().replaceAll('-', '')).eq('owned_by', null).select('id');
+      const dataGet = await supabase.from('devices').select('*').eq("key", values.id.toUpperCase().replaceAll('-', '')).filter("owned_by", "is", null);
+      const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq("key", values.id.toUpperCase().replaceAll('-', '')).filter("owned_by", "is", null).select('id');
+
       if (data.error || data?.data?.length === 0) {
         toast.error(`Error al añadir el dispositivo, dispositivo no encontrado, por favor, revisa la clave introducida`)
         throw data.error
