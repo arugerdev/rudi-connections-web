@@ -7,6 +7,7 @@ import { CopyIcon } from "../icons/table/copy-icon";
 import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
+import Link from "next/link";
 
 interface Props {
   device: any;
@@ -27,15 +28,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
 
     resetList()
   }
-  async function connectVPN() {
-    try {
-      await fetch('http://localhost:3001/connect-vpn', { method: 'POST' });
-      alert('VPN conectándose...');
-    } catch (error) {
-      console.error('Error al conectar la VPN:', error);
-      alert('No se pudo conectar a la VPN.');
-    }
-  }
+
   // @ts-ignore
   const cellValue = device[columnKey];
   switch (columnKey) {
@@ -116,7 +109,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
                 content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                 color="primary"
               >
-                <Button color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost" onClick={() => connectVPN()}>
+                <Button as={Link} href="https://tailscale.com/download" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                   Conectar
                 </Button >
 
