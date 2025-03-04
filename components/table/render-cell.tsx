@@ -111,7 +111,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                   content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                   color="primary"
                 >
-                  <Button as={Link} href="tailscale://up" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
+                  <Button onClick={() => window.api.ipc('connect-vpn')} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                     Conectar
                   </Button >
 
