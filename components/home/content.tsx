@@ -2,7 +2,7 @@
 import React from "react";
 import { TableWrapper } from "../table/table";
 import { CardActivesDevices } from "./card-activeDevices";
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/react";
 import NextLink from "next/link";
 import { CardInactivesDevices } from "./card-inactiveDevices";
 import { CardAllDevices } from "./card-allDevices";

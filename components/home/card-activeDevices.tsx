@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import { getDevices } from "../table/data";
 import { createClient } from "@/utils/supabase/client";

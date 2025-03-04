@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";

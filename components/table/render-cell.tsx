@@ -1,4 +1,4 @@
-import { User, Tooltip, Chip, Button, useDisclosure } from "@nextui-org/react";
+import { User, Tooltip, Chip, Button, useDisclosure } from "@heroui/react";
 import React, { useState } from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
 import Link from "next/link";
+import { useVPNTopbarContext } from "../layout/layout-context";
+import { sendToElectron } from "@/utils/electronjs";
 
 interface Props {
   device: any;
@@ -29,9 +31,12 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
 
     resetList()
   }
+  const { opened, setOpen } = useVPNTopbarContext();
 
   // @ts-ignore
   const cellValue = device[columnKey];
+
+
   switch (columnKey) {
 
     case "name":
@@ -78,14 +83,14 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
 
             <div>
               <Tooltip content="Ver detalles">
-                <Button isDisabled isIconOnly variant='light' onClick={() => console.log("Ver detalles", device?.id)}>
+                <Button isDisabled isIconOnly variant='light' onPress={() => console.log("Ver detalles", device?.id)}>
                   <EyeIcon size={20} fill="#979797" />
                 </Button>
               </Tooltip>
             </div>
             {/* <div>
               <Tooltip content="Editar Dispositivo">
-                <Button isDisabled isIconOnly variant='light' onClick={() => console.log("Editar", device?.id)}>
+                <Button isDisabled isIconOnly variant='light' onPress={() => console.log("Editar", device?.id)}>
                   <EditIcon size={20} fill="#979797" />
                 </Button>
               </Tooltip>
@@ -95,7 +100,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                 content="Borrar dispositivo"
                 color="danger"
               >
-                <Button isIconOnly variant='light' onClick={() => handleRemoveDevice()}>
+                <Button isIconOnly variant='light' onPress={() => handleRemoveDevice()}>
                   <DeleteIcon size={20} fill="#FF0080" />
                 </Button>
               </Tooltip>
@@ -111,7 +116,10 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                   content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
                   color="primary"
                 >
-                  <Button onClick={() => (window as any).api.ipc('connect-vpn')} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
+                  <Button onPress={() => {
+                    sendToElectron('connect-vpn');
+                    setOpen();
+                  }} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                     Conectar
                   </Button >
 

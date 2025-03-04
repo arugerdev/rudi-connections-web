@@ -8,14 +8,14 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import { columns, getDevices } from "./data";
 import { RenderCell } from "./render-cell";
 import { createClient } from "@/utils/supabase/client";
 import { useAsyncList } from "@react-stately/data";
 import { DeleteIcon } from "../icons/table/delete-icon";
-import { Selection } from '@nextui-org/react';
+import { Selection } from "@heroui/react";
 import { Database } from "@/helpers/database.types";
 import { useIsElectron } from "../hooks/useIsElectron";
 
@@ -137,7 +137,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
             content="Borrar varios dispositivos"
             color="danger"
           >
-            <Button isDisabled={(selectedKeys == 'all' ? false : selectedKeys.size <= 0)} isIconOnly variant='light' onClick={() => handleRemoveMultipleDevices()}>
+            <Button isDisabled={(selectedKeys == 'all' ? false : selectedKeys.size <= 0)} isIconOnly variant='light' onPress={() => handleRemoveMultipleDevices()}>
               <DeleteIcon size={20} fill="#FF0080" />
             </Button>
           </Tooltip>
@@ -170,10 +170,10 @@ export const TableWrapper = ({ filter = '', select = true }) => {
           loadingState={list.isLoading ? 'loading' : 'idle'}
           items={(filterDevices(list.items))}>
           {(item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item?.id}>
               {(columnKey) => (
                 <TableCell>
-                  {RenderCell({ device: item, columnKey: columnKey, resetList: list.reload, isElectron:isElectron})}
+                  {RenderCell({ device: item, columnKey: columnKey, resetList: list.reload, isElectron: isElectron })}
                 </TableCell>
               )}
             </TableRow>

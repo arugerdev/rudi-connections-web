@@ -1,4 +1,4 @@
-import { Button, Input, InputProps } from "@nextui-org/react"
+import { Button, Input, InputProps } from "@heroui/react"
 import { useEffect, useState } from "react"
 import { TrashIcon } from "../icons/devices/trash-icon"
 import { DeleteIcon } from "../icons/table/delete-icon"
@@ -57,7 +57,7 @@ export const InputsArray = ({ className, initialValuesAsPlaceholder = false, ini
                             value={item}>
                             {(inputProps: InputProps) => (
 
-                                <Input {...inputProps} variant="bordered" placeholder={(initialValuesAsPlaceholder ? initialValues[key] : placeholders)} color={color} endContent={<Button isIconOnly variant='light' onClick={() => handleRemove(key)}><DeleteIcon size={20} fill="#FF0080" /></Button>} />
+                                <Input {...inputProps} variant="bordered" placeholder={(initialValuesAsPlaceholder ? initialValues[key] : placeholders)} color={color} endContent={<Button isIconOnly variant='light' onPress={() => handleRemove(key)}><DeleteIcon size={20} fill="#FF0080" /></Button>} />
                             )}
                         </ReactInputMask>
 
@@ -74,7 +74,7 @@ export const InputsArray = ({ className, initialValuesAsPlaceholder = false, ini
                         endContent={
                             <Button isIconOnly
                                 variant='light'
-                                onClick={() => handleRemove(key)}>
+                                onPress={() => handleRemove(key)}>
                                 <DeleteIcon size={20} fill="#FF0080" />
                             </Button>
                         }
