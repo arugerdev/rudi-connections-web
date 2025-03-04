@@ -8,17 +8,15 @@ import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
 import Link from "next/link";
-import { useIsElectron } from "../hooks/useIsElectron";
 
 interface Props {
   device: any;
   columnKey: string | React.Key;
   resetList: CallableFunction;
+  isElectron: boolean | null;
 }
 
-export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) => {
-
-  const isElectron = useIsElectron();
+export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectron = false }: Props) => {
 
   const handleRemoveDevice = async () => {
     console.log('Delete device')
@@ -107,7 +105,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
             <div>
               <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
-            {isElectron && (
+            {isElectron &&
               <div>
                 <Tooltip
                   content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
@@ -118,10 +116,8 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
                   </Button >
 
                 </Tooltip>
-
-
               </div>
-            )}
+            }
           </section>
         </div>
       );

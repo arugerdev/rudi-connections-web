@@ -17,9 +17,12 @@ import { useAsyncList } from "@react-stately/data";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { Selection } from '@nextui-org/react';
 import { Database } from "@/helpers/database.types";
+import { useIsElectron } from "../hooks/useIsElectron";
 
 export const TableWrapper = ({ filter = '', select = true }) => {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
+  const isElectron = useIsElectron();
+
   const [page, setPage] = useState(1);
 
   const supabase = createClient()
@@ -170,7 +173,7 @@ export const TableWrapper = ({ filter = '', select = true }) => {
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>
-                  {RenderCell({ device: item, columnKey: columnKey, resetList: list.reload })}
+                  {RenderCell({ device: item, columnKey: columnKey, resetList: list.reload, isElectron:isElectron})}
                 </TableCell>
               )}
             </TableRow>
