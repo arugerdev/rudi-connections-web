@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
 import Link from "next/link";
+import { useIsElectron } from "../hooks/useIsElectron";
 
 interface Props {
   device: any;
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) => {
+
+  const isElectron = useIsElectron();
 
   const handleRemoveDevice = async () => {
     console.log('Delete device')
@@ -104,19 +107,21 @@ export const RenderCell = ({ device, columnKey, resetList = () => { } }: Props) 
             <div>
               <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
-            {/* <div>
-              <Tooltip
-                content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
-                color="primary"
-              >
-                <Button as={Link} href="tailscale://up" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
-                  Conectar
-                </Button >
+            {isElectron && (
+              <div>
+                <Tooltip
+                  content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
+                  color="primary"
+                >
+                  <Button as={Link} href="tailscale://up" target="_blank" color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
+                    Conectar
+                  </Button >
 
-              </Tooltip>
+                </Tooltip>
 
 
-            </div> */}
+              </div>
+            )}
           </section>
         </div>
       );
