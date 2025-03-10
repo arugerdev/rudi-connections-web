@@ -37,6 +37,19 @@ export const VPNTopbar = () => {
         }, 1000);
 
     }, []);
+
+    useEffect(() => {
+        if (status.status === 'activo') {
+            setOpen();
+        }
+
+        if (typeof (window) !== 'undefined') {
+            if (status.status !== 'activo') {
+                localStorage.removeItem('deviceConnected');
+            }
+        }
+    }, [status]);
+
     const handleDisconnect = () => {
         sendToElectron('tailscale-down');
         receiveFromElectron('tailscale-down-reply', (response: any) => {
