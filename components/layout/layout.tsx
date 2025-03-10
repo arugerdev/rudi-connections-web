@@ -31,6 +31,7 @@ export const Layout = ({ children }: Props) => {
 
   const [deviceConnected, setDeviceConnected] = React.useState(() => {
     // Carga el estado inicial desde localStorage si está disponible
+    if (!window) return {};
     const storedDevice = localStorage.getItem('deviceConnected');
     return storedDevice ? JSON.parse(storedDevice) : {}; // Si no hay en el localStorage, usa un objeto vacío
   });
