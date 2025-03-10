@@ -70,11 +70,13 @@ export const VPNTopbar = () => {
                                             <span className="text-sm text-foreground-400 font-semibold">Mi IP VPN: {status.ip}</span>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row gap-2 items-center">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {deviceConnected.tailscale.public_ip}</span>
+                                    {deviceConnected?.tailscale &&
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {deviceConnected?.tailscale?.public_ip}</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
 
 
                                 </section>
