@@ -26,6 +26,7 @@ export const VPNTopbar = () => {
     useEffect(() => {
 
         setInterval(() => {
+            console.log(deviceConnected)
             sendToElectron('tailscale-status');
             receiveFromElectron('tailscale-status-reply', (response: any) => {
                 setStatus(response);

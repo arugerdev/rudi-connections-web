@@ -23,8 +23,8 @@ export const Layout = ({ children }: Props) => {
   const [vpnTopbarOpen, setVPNTopbarOpen] = React.useState(false);
   const [_vpn, setVpnLocked] = useLockedBody(false);
   const handleToggleVPNTopbar = () => {
-    setVPNTopbarOpen(!vpnTopbarOpen);
-    setVpnLocked(!vpnTopbarOpen);
+    setVPNTopbarOpen(true);
+    setVpnLocked(true);
   };
 
   const isElectron = useIsElectron();
