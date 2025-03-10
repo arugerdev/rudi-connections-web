@@ -118,6 +118,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                 >
                   <Button onPress={() => {
                     sendToElectron('connect-vpn');
+                    console.log(device)
                     setDeviceConnected?.(device);
                     setOpen();
                   }} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
