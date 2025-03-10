@@ -12,7 +12,7 @@ import { receiveFromElectron, sendToElectron } from "@/utils/electronjs";
 
 export const VPNTopbar = () => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    const { opened, setOpen, deviceConnected } = useVPNTopbarContext();
+    const { opened, setOpen } = useVPNTopbarContext();
     useEffect(() => {
         if (opened) {
             onOpen()
@@ -22,11 +22,14 @@ export const VPNTopbar = () => {
         }
     }, [opened])
 
+
+    const [storedDevice, setStoredDevice] = useState<any>(typeof (window) === 'undefined' ? {} : (JSON.parse(localStorage.getItem('deviceConnected') ?? '{}')));
     const [status, setStatus] = useState<{ status: String | null, ip: String | null, deviceConnected: object | any }>({ status: 'desconocido', ip: null, deviceConnected: {} });
     useEffect(() => {
 
         setInterval(() => {
-            console.log(deviceConnected)
+
+            setStoredDevice(typeof (window) === 'undefined' ? {} : (JSON.parse(localStorage.getItem('deviceConnected') ?? '{}')));
             sendToElectron('tailscale-status');
             receiveFromElectron('tailscale-status-reply', (response: any) => {
                 setStatus(response);
@@ -71,10 +74,11 @@ export const VPNTopbar = () => {
                                             <span className="text-sm text-foreground-400 font-semibold">Mi IP VPN: {status.ip}</span>
                                         </div>
                                     </div>
-                                    {deviceConnected?.tailscale &&
+                                    {storedDevice?.tailscale &&
                                         <div className="flex flex-row gap-2 items-center">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {deviceConnected?.tailscale?.public_ip}</span>
+                                                <span className="text-sm text-foreground-400 font-semibold">Dispositivo: {storedDevice?.deviceName}</span>
+                                                <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {storedDevice?.tailscale?.public_ip}</span>
                                             </div>
                                         </div>
                                     }
