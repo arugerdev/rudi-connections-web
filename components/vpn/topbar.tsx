@@ -74,11 +74,11 @@ export const VPNTopbar = () => {
                                             <span className="text-sm text-foreground-400 font-semibold">Mi IP VPN: {status.ip}</span>
                                         </div>
                                     </div>
-                                    {storedDevice?.tailscale &&
+                                    {storedDevice?.config &&
                                         <div className="flex flex-row gap-2 items-center">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-sm text-foreground-400 font-semibold">Dispositivo: {storedDevice?.deviceName}</span>
-                                                <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {storedDevice?.tailscale?.public_ip}</span>
+                                                <span className="text-sm text-foreground-400 font-semibold">Dispositivo: {storedDevice?.config?.deviceName}</span>
+                                                <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {storedDevice?.config?.tailscale?.public_ip}</span>
                                             </div>
                                         </div>
                                     }
