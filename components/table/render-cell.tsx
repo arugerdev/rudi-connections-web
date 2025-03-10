@@ -110,7 +110,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
             <div>
               <ConfigureDeviceButtonModal device={device} resetList={resetList} />
             </div>
-            {isElectron &&
+            {isElectron && device &&
               <div>
                 <Tooltip
                   content={(!device.public_ip || device.public_ip === '') ? 'Necesita tener una ip publica para conectarse, por favor conecte el dispositivo a internet' : "Conectar al dispositivo a traves de la VPN"}
@@ -118,7 +118,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                 >
                   <Button onPress={() => {
                     sendToElectron('connect-vpn');
-                    setDeviceConnected(device);
+                    setDeviceConnected?.(device);
                     setOpen();
                   }} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                     Conectar

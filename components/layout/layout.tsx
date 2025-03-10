@@ -41,8 +41,8 @@ export const Layout = ({ children }: Props) => {
         value={{
           opened: vpnTopbarOpen,
           setOpen: handleToggleVPNTopbar,
-          deviceConnected: deviceConnected,
-          setDeviceConnected: setDeviceConnected,
+          deviceConnected,
+          setDeviceConnected,
         }}>
 
         {isElectron &&

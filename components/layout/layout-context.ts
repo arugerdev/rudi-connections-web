@@ -10,8 +10,8 @@ interface SidebarContext {
 interface VPNTopbarContext {
   opened: boolean;
   setOpen: () => void;
-  deviceConnected: object | any;
-  setDeviceConnected: Dispatch<SetStateAction<{}>>;
+  deviceConnected: object | any | null;
+  setDeviceConnected: Dispatch<SetStateAction<object | any | null>> | null;
 }
 
 export const SidebarContext = createContext<SidebarContext>({
@@ -20,9 +20,13 @@ export const SidebarContext = createContext<SidebarContext>({
 });
 export const VPNTopbarContext = createContext<VPNTopbarContext>({
   opened: false,
-  setOpen: () => { },
+  setOpen: () => {
+    console.error('oops, the default got used. Fix your bug!');
+  },
   deviceConnected: {},
-  setDeviceConnected: () => { },
+  setDeviceConnected: () => {
+    console.error('oops, the default got used. Fix your bug!');
+  },
 },
 );
 
