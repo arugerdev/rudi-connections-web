@@ -1,16 +1,12 @@
 "use client";
 
-import { createAuthCookie } from "@/actions/auth.action";
 import { LoginSchema } from "@/helpers/schemas";
 import { LoginFormType } from "@/helpers/types";
-import { Button, Input } from "@heroui/react";
+import { addToast, Button, Input } from "@heroui/react";
 import { Formik } from "formik";
-import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { signInWithEmail } from "./supabase-auth";
-import { createClient } from "@supabase/supabase-js";
-import toast from "react-hot-toast";
 
 export const Login = () => {
   const router = useRouter();
@@ -28,14 +24,21 @@ export const Login = () => {
       signInWithEmail(values.email, values.password).then((data) => {
 
         setLoading(false)
-        toast.success("¡Inicio de sesión realizado correctamente! 🎉✅")
+        addToast({
+          title: "🎉✅ ¡Inicio de sesión realizado correctamente!",
+          description: "Bienvenido de nuevo a Rud1.es",
+          color: 'success',
+        })
         router.push('/')
       }).catch((err) => {
         setLoading(false)
-        toast.error("Ha ocurrido un error en el inicio de sesión 😢")
+        addToast({
+          title: "Ha ocurrido un error en el inicio de sesión 😢",
+          description: JSON.stringify(err),
+          color: 'danger',
+        })
         console.log(err)
 
-        alert(err)
         return
       })
 
@@ -86,11 +89,11 @@ export const Login = () => {
         )}
       </Formik >
 
-      <div className='font-light text-slate-400 mt-4 text-sm'>
+      <div className='font-light dark:text-slate-200 light:text-slate-600 mt-4 text-sm'>
         ¿Aún no tienes una cuenta?{" "}
-        <Link href='/register' className='font-bold'>
+        <a href='/register' className='font-bold'>
           Crea una aquí
-        </Link>
+        </a>
       </div>
     </>
   );

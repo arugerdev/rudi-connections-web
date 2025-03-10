@@ -1,14 +1,6 @@
 
-import { LoginSchema } from "@/helpers/schemas";
 import { ConfigFormType } from "@/helpers/types";
-import { createClient } from "@/utils/supabase/client";
-import { Button, Select, SelectItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, Accordion, AccordionItem, Switch, Link } from "@heroui/react";
-import { Form, Formik } from "formik";
-import router from "next/router";
-import { useState, useEffect, useCallback } from "react";
-import { signInWithEmail } from "../auth/supabase-auth";
-import { InputsArray } from "../inputs/InputsArray";
-import toast from "react-hot-toast";
+import { Button, Link } from "@heroui/react";
 
 export const ConfigureDeviceButtonModal = ({ device, resetList = () => { } }: {
     device: {

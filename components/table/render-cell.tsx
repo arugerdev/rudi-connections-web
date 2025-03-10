@@ -1,13 +1,10 @@
-import { User, Tooltip, Chip, Button, useDisclosure } from "@heroui/react";
-import React, { useState } from "react";
+import { Tooltip, Chip, Button, addToast } from "@heroui/react";
+import React from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
-import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
 import { CopyIcon } from "../icons/table/copy-icon";
-import toast from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 import { ConfigureDeviceButtonModal } from "../buttons/ConfigureDeviceButtonModal";
-import Link from "next/link";
 import { useVPNTopbarContext } from "../layout/layout-context";
 import { sendToElectron } from "@/utils/electronjs";
 
@@ -50,7 +47,14 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
           {device.public_ip &&
 
             <Tooltip content="Copiar IP Pública">
-              <button onClick={() => { navigator.clipboard.writeText(device.public_ip); toast.success(`IP Pública copiada correctamente \n ${device?.config?.config?.deviceName}: ${device.public_ip}`) }}>
+              <button onClick={() => {
+                navigator.clipboard.writeText(device.public_ip);
+                addToast({
+                  title: "📋✅ IP Pública copiada correctamente",
+                  description: device.public_ip,
+                  color: 'success',
+                })
+              }}>
                 <CopyIcon size={24} fill="#979797" />
               </button>
             </Tooltip>
@@ -83,18 +87,12 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
 
             <div>
               <Tooltip content="Ver detalles">
-                <Button isDisabled isIconOnly variant='light' onPress={() => console.log("Ver detalles", device?.id)}>
+                <Button isIconOnly variant='light' onPress={() => console.log("Ver detalles", device)}>
                   <EyeIcon size={20} fill="#979797" />
                 </Button>
               </Tooltip>
             </div>
-            {/* <div>
-              <Tooltip content="Editar Dispositivo">
-                <Button isDisabled isIconOnly variant='light' onPress={() => console.log("Editar", device?.id)}>
-                  <EditIcon size={20} fill="#979797" />
-                </Button>
-              </Tooltip>
-            </div> */}
+
             <div>
               <Tooltip
                 content="Borrar dispositivo"

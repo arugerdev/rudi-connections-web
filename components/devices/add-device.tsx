@@ -1,7 +1,8 @@
 import { DeviceIdSchema } from "@/helpers/schemas";
-import { DeviceIdFormType, LoginFormType } from "@/helpers/types";
+import { DeviceIdFormType } from "@/helpers/types";
 import { createClient } from "@/utils/supabase/client";
 import {
+  addToast,
   Button,
   Input,
   InputProps,
@@ -14,8 +15,7 @@ import {
 } from "@heroui/react";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import React, { useCallback } from "react";
 import ReactInputMask from 'react-input-mask'
 export const AddDevice = () => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -34,11 +34,19 @@ export const AddDevice = () => {
       const data = await supabase.from('devices').update({ owned_by: user.user?.id }).eq("key", values.id.toUpperCase().replaceAll('-', '')).filter("owned_by", "is", null).select('id');
 
       if (data.error || data?.data?.length === 0) {
-        toast.error(`Error al añadir el dispositivo, dispositivo no encontrado, por favor, revisa la clave introducida`)
+        addToast({
+          title: "Error al añadir el dispositivo",
+          description: "Dispositivo no encontrado, por favor, revisa la clave introducida",
+          color: 'danger',
+        })
         throw data.error
       }
 
-      toast.success(`Dispositivo añadido correctamente`)
+      addToast({
+        title: "✅ Dispositivo añadido correctamente",
+        description: values.id.toUpperCase(),
+        color: 'success',
+      })
       onClose()
     },
     [router]

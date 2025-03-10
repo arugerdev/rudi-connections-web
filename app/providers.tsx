@@ -3,8 +3,9 @@ import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
-import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import { ToastProvider } from "@heroui/react";
+import { createClient } from "@/utils/supabase/client";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -12,17 +13,29 @@ export interface ProvidersProps {
 }
 
 export function Providers({ children, themeProps }: ProvidersProps) {
+  const [notifications, setNotifications] = React.useState(false);
   useEffect(() => {
-    (window as any).toast = toast
-  }, [])
+    const fetchUserData = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.getUser();
+      console.log(data.user);
+      if (error) {
+        console.error("Error al obtener los datos del usuario", error);
+      }
+
+      if (data) {
+        setNotifications(data.user?.user_metadata?.notifications ?? true);
+      }
+    };
+    fetchUserData();
+  }, []);
 
 
   return (
     <HeroUIProvider>
-      <Toaster
-        position='bottom-right'
-        gutter={2}
-      />
+      {notifications &&
+        <ToastProvider />
+      }
       <NextThemesProvider
         defaultTheme='system'
         attribute='class'

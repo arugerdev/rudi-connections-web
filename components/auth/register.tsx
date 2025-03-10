@@ -2,13 +2,11 @@
 
 import { RegisterSchema } from "@/helpers/schemas";
 import { RegisterFormType } from "@/helpers/types";
-import { Button, Input } from "@heroui/react";
+import { addToast, Button, Input } from "@heroui/react";
 import { Formik } from "formik";
-import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { signUpNewUser } from "./supabase-auth";
-import toast from "react-hot-toast";
 export const Register = () => {
   const router = useRouter();
 
@@ -24,11 +22,18 @@ export const Register = () => {
       if (values.password !== values.confirmPassword) return
 
       signUpNewUser(values.name, values.email, values.password).then((data) => {
-        toast.success("¡Registro realizado correctamente! 🎉✅")
+        addToast({
+          title: "🎉✅ ¡Registro realizado correctamente!",
+          description: "Gracias por registrarte en Rud1.es",
+          color: 'success',
+        })
         router.push("/");
       }).catch((err) => {
-        toast.error("Ha ocurrido un error al realizar el registro 😢: " + JSON.stringify(err))
-        alert(err)
+        addToast({
+          title: "Ha ocurrido un error al realizar el registro 😢",
+          description: JSON.stringify(err),
+          color: 'danger',
+        })
         return
       })
 
@@ -99,11 +104,11 @@ export const Register = () => {
         )}
       </Formik>
 
-      <div className='font-light text-slate-400 mt-4 text-sm'>
+      <div className='font-light dark:text-slate-200 light:text-slate-600 mt-4 text-sm'>
         ¿Ya tienes una cuenta?{" "}
-        <Link href='/login' className='font-bold'>
+        <a href='/login' className='font-bold'>
           Inicia sesión aquí
-        </Link>
+        </a>
       </div>
     </>
   );

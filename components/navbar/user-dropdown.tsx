@@ -1,10 +1,10 @@
 import {
+  addToast,
   Avatar,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Navbar,
   NavbarItem,
 } from "@heroui/react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -12,7 +12,6 @@ import { DarkModeSwitch } from "./darkmodeswitch";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/auth-js";
-import toast from "react-hot-toast";
 
 export const UserDropdown = () => {
   const supabase = createClient()
@@ -31,7 +30,11 @@ export const UserDropdown = () => {
   const handleLogout = useCallback(async () => {
     supabase.auth.signOut()
     router.replace("/login");
-    toast.success('Sesión cerrada correctamente')
+    addToast({
+      title: "✅ Sesión cerrada correctamente",
+      description: "Nos vemos pronto 👋",
+      color: 'success',
+    })
   }, [router]);
 
   return (

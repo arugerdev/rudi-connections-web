@@ -1,7 +1,7 @@
 import React from "react";
 import { Sidebar } from "./sidebar.styles";
 import { HomeIcon } from "../icons/sidebar/home-icon";
-import { ReportsIcon } from "../icons/sidebar/reports-icon";
+// import { ReportsIcon } from "../icons/sidebar/reports-icon";
 import { SettingsIcon } from "../icons/sidebar/settings-icon";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarMenu } from "./sidebar-menu";
@@ -48,16 +48,17 @@ export const SidebarWrapper = () => {
                 icon={<DevicesIcon />}
                 href="devices"
               />
-              <SidebarItem
+              {/* <SidebarItem
                 isActive={pathname === "/analitycs"}
                 title="Analíticas"
                 icon={<ReportsIcon />}
               // href="analitycs"
-              />
+              /> */}
               <SidebarItem
                 isActive={pathname === "/settings"}
                 title="Configuración"
                 icon={<SettingsIcon />}
+                href="settings"
               />
             </SidebarMenu>
 

@@ -1,14 +1,8 @@
 "use client";
-import { Button, Input } from "@heroui/react";
+import { Input } from "@heroui/react";
 import Link from "next/link";
-import React, { useState } from "react";
-import { DotsIcon } from "@/components/icons/devices/dots-icon";
-import { ExportIcon } from "@/components/icons/devices/export-icon";
-import { InfoIcon } from "@/components/icons/devices/info-icon";
-import { TrashIcon } from "@/components/icons/devices/trash-icon";
 import { HouseIcon } from "@/components/icons/breadcrumb/house-icon";
-import { UsersIcon } from "@/components/icons/breadcrumb/users-icon";
-import { SettingsIcon } from "@/components/icons/sidebar/settings-icon";
+import React, { useState } from "react";
 import { TableWrapper } from "@/components/table/table";
 import { AddDevice } from "./add-device";
 

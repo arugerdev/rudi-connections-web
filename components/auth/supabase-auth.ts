@@ -11,7 +11,9 @@ async function signUpNewUser(name: string, email: string, password: string) {
         password: password,
         options: {
             data: {
-                name: name
+                name: name,
+                notifications: true,
+                updateInterval: '10',
             },
             emailRedirectTo: `${origin}/callback`,
         },
