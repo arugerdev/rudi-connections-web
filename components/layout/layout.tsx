@@ -29,7 +29,19 @@ export const Layout = ({ children }: Props) => {
 
   const isElectron = useIsElectron();
 
-  const [deviceConnected, setDeviceConnected] = React.useState({});
+  const [deviceConnected, setDeviceConnected] = React.useState(() => {
+    // Carga el estado inicial desde localStorage si está disponible
+    const storedDevice = localStorage.getItem('deviceConnected');
+    return storedDevice ? JSON.parse(storedDevice) : {}; // Si no hay en el localStorage, usa un objeto vacío
+  });
+
+  useEffect(() => {
+    // Siempre que el estado cambie, guárdalo en localStorage
+    if (deviceConnected) {
+      localStorage.setItem('deviceConnected', JSON.stringify(deviceConnected));
+    }
+  }, [deviceConnected]); // Esta dependencia asegura que se guarde cuando `deviceConnected` cambie
+
 
   return (
     <SidebarContext.Provider
