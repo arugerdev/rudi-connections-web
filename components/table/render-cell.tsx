@@ -31,7 +31,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
 
     resetList()
   }
-  const { opened, setOpen } = useVPNTopbarContext();
+  const { opened, setOpen, setDeviceConnected } = useVPNTopbarContext();
 
   // @ts-ignore
   const cellValue = device[columnKey];
@@ -118,6 +118,7 @@ export const RenderCell = ({ device, columnKey, resetList = () => { }, isElectro
                 >
                   <Button onPress={() => {
                     sendToElectron('connect-vpn');
+                    setDeviceConnected(device);
                     setOpen();
                   }} color="primary" isDisabled={!device.public_ip || device.public_ip === '' || device.status !== 'running'} className="cursor-pointer" variant="ghost">
                     Conectar

@@ -29,6 +29,8 @@ export const Layout = ({ children }: Props) => {
 
   const isElectron = useIsElectron();
 
+  const [deviceConnected, setDeviceConnected] = React.useState({});
+
   return (
     <SidebarContext.Provider
       value={{
@@ -39,6 +41,8 @@ export const Layout = ({ children }: Props) => {
         value={{
           opened: vpnTopbarOpen,
           setOpen: handleToggleVPNTopbar,
+          deviceConnected: deviceConnected,
+          setDeviceConnected: setDeviceConnected,
         }}>
 
         {isElectron &&

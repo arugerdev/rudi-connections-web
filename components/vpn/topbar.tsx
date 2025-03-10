@@ -12,7 +12,7 @@ import { receiveFromElectron, sendToElectron } from "@/utils/electronjs";
 
 export const VPNTopbar = () => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    const { opened, setOpen } = useVPNTopbarContext();
+    const { opened, setOpen, deviceConnected } = useVPNTopbarContext();
     useEffect(() => {
         if (opened) {
             onOpen()
@@ -22,7 +22,7 @@ export const VPNTopbar = () => {
         }
     }, [opened])
 
-    const [status, setStatus] = useState<{ status: String | null, ip: String | null }>({ status: 'desconocido', ip: null });
+    const [status, setStatus] = useState<{ status: String | null, ip: String | null, deviceConnected: object | any }>({ status: 'desconocido', ip: null, deviceConnected: {} });
     useEffect(() => {
 
         setInterval(() => {
@@ -67,7 +67,12 @@ export const VPNTopbar = () => {
 
                                     <div className="flex flex-row gap-2 items-center">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm text-foreground-400 font-semibold">IP Pública: {status.ip}</span>
+                                            <span className="text-sm text-foreground-400 font-semibold">Mi IP VPN: {status.ip}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row gap-2 items-center">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-foreground-400 font-semibold">IP del dispositivo: {deviceConnected.tailscale.public_ip}</span>
                                         </div>
                                     </div>
 

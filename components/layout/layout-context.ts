@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 interface SidebarContext {
   collapsed: boolean;
@@ -10,6 +10,8 @@ interface SidebarContext {
 interface VPNTopbarContext {
   opened: boolean;
   setOpen: () => void;
+  deviceConnected: object | any;
+  setDeviceConnected: Dispatch<SetStateAction<{}>>;
 }
 
 export const SidebarContext = createContext<SidebarContext>({
@@ -19,6 +21,8 @@ export const SidebarContext = createContext<SidebarContext>({
 export const VPNTopbarContext = createContext<VPNTopbarContext>({
   opened: false,
   setOpen: () => { },
+  deviceConnected: {},
+  setDeviceConnected: () => { },
 },
 );
 
