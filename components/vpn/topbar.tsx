@@ -39,10 +39,6 @@ export const VPNTopbar = () => {
     }, []);
 
     useEffect(() => {
-        if (status.status === 'activo') {
-            setOpen();
-        }
-
         if (typeof (window) !== 'undefined') {
             if (status.status !== 'activo') {
                 localStorage.removeItem('deviceConnected');
